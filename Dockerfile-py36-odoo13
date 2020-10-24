@@ -37,3 +37,6 @@ ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
 ENV PATH=/opt/odoo-venv/bin:$PATH
+
+RUN mkdir /build
+WORKDIR /build

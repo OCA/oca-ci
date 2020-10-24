@@ -4,6 +4,8 @@ FROM ubuntu:18.04
 RUN set -ex \
   && apt-get update \
   && apt-get -y install \
+    curl \
+    gettext \
     git \
     python3-venv \
   && rm -rf /var/lib/apt/lists/*

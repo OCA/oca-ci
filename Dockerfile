@@ -51,7 +51,7 @@ ARG python_version=python3
 
 # Install build dependencies for common Odoo requirements
 RUN apt-get update -q \
-    && DEBIAN_FRONTEND=noninteractive apt install -qq --no-install-recommends \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -qq --no-install-recommends \
        build-essential \
        $python_version-dev \
        virtualenv \

@@ -43,7 +43,7 @@ jobs:
             odoo_version=${{ matrix.odoo_version }}
           tags: ghcr.io/${{ github.repository_owner }}/oca-ci:py${{ matrix.python_version }}-odoo${{matrix.odoo_version }}-latest
           push: true
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/oca-ci:py${{ matrix.python_version }}-odoo${{matrix.odoo_version }}-latest
-          cache-to: type=inline
+          #cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/oca-ci:py${{ matrix.python_version }}-odoo${{matrix.odoo_version }}-latest
+          #cache-to: type=inline
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

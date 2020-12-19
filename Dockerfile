@@ -71,18 +71,20 @@ RUN apt-get update -qq \
 # and make sure addons we'll install declare all their python dependencies properly
 RUN virtualenv -p $python_version /opt/odoo-venv \
     && /opt/odoo-venv/bin/pip install --no-cache -U pip wheel setuptools \
-    && pip list
+    && /opt/odoo-venv/bin/pip list
 ENV PATH=/opt/odoo-venv/bin:$PATH
 
 ARG odoo_version
 
-# Install Odoo requirements
-RUN pip install --no-cache -r https://raw.githubusercontent.com/OCA/OCB/$odoo_version/requirements.txt
+# Install Odoo requirements (use ADD for correct layer caching)
+ADD https://raw.githubusercontent.com/OCA/OCB/$odoo_version/requirements.txt /tmp/ocb-requirements.txt
+RUN pip install --no-cache -r /tmp/ocb-requirements.txt
 
 # Install other test requirements
 RUN pip install coverage websocket-client
 
-# Install Odoo
+# Install Odoo (use ADD for correct layer caching)
+ADD https://api.github.com/repos/odoo/odoo/git/refs/heads/$odoo_version /tmp/odoo-version.json
 RUN git clone --depth=1 --branch=$odoo_version https://github.com/odoo/odoo /opt/odoo
 RUN pip install --no-cache  -e /opt/odoo \
     && pip list

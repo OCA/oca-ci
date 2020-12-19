@@ -8,6 +8,7 @@ jobs:
   main:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         include:
           - python_version: "python2"
@@ -33,5 +34,6 @@ jobs:
           tags: sbidoul/oca-ci:${{ matrix.python_version }}-odoo${{ matrix.odoo_version }}
           build-args: |
             python_version=${{ matrix.python_version }}
+            odoo_version=${{ matrix.odoo_version }}
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

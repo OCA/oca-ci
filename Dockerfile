@@ -67,15 +67,16 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 RUN virtualenv -p $python_version /opt/odoo-venv
 ENV PATH=/opt/odoo-venv/bin:$PATH
 
+ARG odoo_version
+
 # Install Odoo requirements
-COPY odoo/requirements.txt /opt/odoo/requirements.txt
-RUN pip install -r /opt/odoo/requirements.txt
+RUN pip install -r https://raw.githubusercontent.com/OCA/OCB/$odoo_version/requirements.txt
 
 # Install other test requirements
 RUN pip install coverage websocket-client
 
 # Install Odoo
-COPY odoo /opt/odoo
+RUN git clone --depth=1 --branch=$odoo_version https://github.com/odoo/odoo /opt/odoo
 RUN pip install -e /opt/odoo
 
 ENV PGHOST postgres

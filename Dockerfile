@@ -64,7 +64,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 
 # Make a virtualenv for Odoo so we isolate from system python dependencies
 # and make sure addons we'll install declare all their python dependencies properly
-RUN virtualenv -p $python_version /opt/odoo-venv
+RUN virtualenv -p $python_version /opt/odoo-venv \
+    && /opt/odoo-venv/bin/pip install -U pip wheel setuptools
 ENV PATH=/opt/odoo-venv/bin:$PATH
 
 ARG odoo_version

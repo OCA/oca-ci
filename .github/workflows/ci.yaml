@@ -26,14 +26,22 @@ jobs:
           - python_version: "3.6"
             odoo_version: "14.0"
     steps:
+      - name: Login to ghcr.io
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.CR_PAT }}
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          push: false
-          tags: sbidoul/oca-ci:py${{ matrix.python_version }}-odoo${{ matrix.odoo_version }}
           build-args: |
             python_version=${{ matrix.python_version }}
             odoo_version=${{ matrix.odoo_version }}
+          tags: ghcr.io/sbidoul/oca-ci/oca-ci-py${{ matrix.python_version }}-odoo${{matrix.odoo_version }}:latest
+          push: true
+          cache-from: type=registry,ref=ghcr.io/sbidoul/oca-ci/oca-ci-py${{ matrix.python_version }}-odoo${{matrix.odoo_version }}:latest
+          cache-to: type=inline
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

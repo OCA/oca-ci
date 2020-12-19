@@ -1,0 +1,41 @@
+name: ci
+
+on:
+  push:
+    branches: master
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - python_version: "python2"
+            odoo_version: "8.0"
+          - python_version: "python2"
+            odoo_version: "9.0"
+          - python_version: "python2"
+            odoo_version: "10.0"
+          - python_version: "python3.5"
+            odoo_version: "11.0"
+          - python_version: "python3.6"
+            odoo_version: "12.0"
+          - python_version: "python3.6"
+            odoo_version: "13.0"
+          - python_version: "python3.6"
+            odoo_version: "14.0"
+    steps:
+      - name: Get Odoo
+        run: |
+          git clone --depth=1 --branch=${{ matrix.odoo_version }} https://github.com/odoo/odoo
+          curl -sSL -o odoo/requirements.txt https://raw.githubusercontent.com/OCA/OCB/${{ matrix.odoo_version }}/requirements.txt
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: false
+          tags: sbidoul/oca-ci:${{ matrix.python_version }}-odoo${{ matrix.odoo_version }}
+          build-args: |
+            python_version=${{ matrix.python_version }}
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}

@@ -13,8 +13,10 @@ jobs:
         include:
           - python_version: "2.7"
             odoo_version: "8.0"
+            codename: bionic
           - python_version: "2.7"
             odoo_version: "9.0"
+            codename: bionic
           - python_version: "2.7"
             odoo_version: "10.0"
           - python_version: "3.5"

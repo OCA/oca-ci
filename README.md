@@ -3,7 +3,7 @@
 These images provide the following guarantees
 
 - Odoo runtime dependencies installed (wkhtmltopdf, lessc, etc)
-- Odoo source in /opt/odoo
+- Odoo shallow git clone in /opt/odoo
 - Odoo installed in a virtualenv isolated from system python packages
 - python, pip, odoo commands in PATH are from that virtualenv
 - start in an empty work directory

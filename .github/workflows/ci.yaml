@@ -11,19 +11,19 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - python_version: "python2"
+          - python_version: "2.7"
             odoo_version: "8.0"
-          - python_version: "python2"
+          - python_version: "2.7"
             odoo_version: "9.0"
-          - python_version: "python2"
+          - python_version: "2.7"
             odoo_version: "10.0"
-          - python_version: "python3.5"
+          - python_version: "3.5"
             odoo_version: "11.0"
-          - python_version: "python3.6"
+          - python_version: "3.6"
             odoo_version: "12.0"
-          - python_version: "python3.6"
+          - python_version: "3.6"
             odoo_version: "13.0"
-          - python_version: "python3.6"
+          - python_version: "3.6"
             odoo_version: "14.0"
     steps:
       - name: Build and push
@@ -31,7 +31,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: false
-          tags: sbidoul/oca-ci:${{ matrix.python_version }}-odoo${{ matrix.odoo_version }}
+          tags: sbidoul/oca-ci:py${{ matrix.python_version }}-odoo${{ matrix.odoo_version }}
           build-args: |
             python_version=${{ matrix.python_version }}
             odoo_version=${{ matrix.odoo_version }}

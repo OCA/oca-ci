@@ -47,14 +47,13 @@ RUN curl -sSL http://nightly.odoo.com/odoo.key | apt-key add - \
 
 RUN add-apt-repository -y ppa:deadsnakes/ppa
 
-ARG python_version=python3
+ARG python_version
 
 # Install build dependencies for common Odoo requirements
 RUN apt-get update -qq \
     && DEBIAN_FRONTEND=noninteractive apt-get install -qq --no-install-recommends \
        build-essential \
-       $python_version-dev \
-       virtualenv \
+       python$python_version-dev \
        # for psycopg
        libpq-dev \
        # for lxml
@@ -65,12 +64,13 @@ RUN apt-get update -qq \
        libldap2-dev \
        libsasl2-dev \
        # for older pillow versions
-       libjpeg-dev
+       libjpeg-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Make a virtualenv for Odoo so we isolate from system python dependencies
 # and make sure addons we'll install declare all their python dependencies properly
-RUN virtualenv -p $python_version /opt/odoo-venv \
-    && /opt/odoo-venv/bin/pip install --no-cache -U pip wheel setuptools \
+RUN curl -sSL https://bootstrap.pypa.io/virtualenv/$python_version/virtualenv.pyz -o /usr/local/bin/virtualenv.pyz \
+    && python$python_version /usr/local/bin/virtualenv.pyz -p python$python_version --download /opt/odoo-venv \
     && /opt/odoo-venv/bin/pip list
 ENV PATH=/opt/odoo-venv/bin:$PATH
 

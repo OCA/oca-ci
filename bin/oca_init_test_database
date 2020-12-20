@@ -1,0 +1,11 @@
+#!/bin/bash
+
+#
+# Initialize the test database, will all direct dependencies installed.
+#
+
+set -ex
+$(which odoo || which openerp-server) \
+  -d $PGDATABASE \
+  -i $(addons --addons-dir "${ADDONS_DIR} --include "${INCLUDE}" --exclude "${EXCLUDE}" list-depends) \
+  --stop-after-init

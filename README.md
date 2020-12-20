@@ -8,27 +8,33 @@ These images provide the following guarantees
 - python, pip, odoo commands in PATH are from that virtualenv
 - start in an empty work directory
 
-Pre-set environment variables
-- TODO: odoo version
+Environment variables:
 
-
-Environment variables that control behavior:
-
-- TODO: include, exclude addons?
-- PIP_EXTRA_INDEX_URL
-- PG*
+- ODOO_VERSION
+- PGHOST=postgres
+- PGUSER=odoo
+- PGPASSWORD=odoo
+- PGDATABASE=odoo
+- ADDONS_DIR=.
+- PIP_EXTRA_INDEX_URL=https://wheelhouse.odoo-community.org/oca-simple
+- PIP_DISABLE_PIP_VERSION_CHECK=1
+- PIP_NO_PYTHON_VERSION_WARNING=1
+- INCLUDE=
+- EXCLUDE=
 
 Available commands
 
-- `oca_install_addons`: install addons to test found in current directory, and
+- `oca_install_addons`: install addons to test found in $ADDONS_DIR, and
   their dependencies
-- `oca_run_tests`: create a test database with direct dependencies of addons to
-  test and run tests with coverage
+- `oca_init_test_database`: create a test database with direct dependencies of
+  addons to test
+- `oca_run_tests`: run tests with coverage
 
 ## Build
 
-build args:
+Build args:
 
+- python_version (no default)
+- odoo_version (no default)
 - codename (default: focal)
-- python_version (default: python3.8)
-
+- odoo_org_repo (default: odoo/odoo)

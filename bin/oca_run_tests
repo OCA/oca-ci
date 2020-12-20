@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# Run tests
+# Run tests.
 #
 
 set -ex

@@ -1,7 +1,8 @@
 #!/bin/bash
 
 #
-# Initialize the test database, will all direct dependencies installed.
+# Initialize the test database, will all direct dependencies of addons to test
+# installed.
 #
 
 set -ex

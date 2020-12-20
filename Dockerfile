@@ -54,6 +54,8 @@ RUN apt-get update -qq \
     && DEBIAN_FRONTEND=noninteractive apt-get install -qq --no-install-recommends \
        build-essential \
        python$python_version-dev \
+       # we need python 3 for our helper scripts
+       python3 \
        # virtualenv needs distutils https://github.com/pypa/virtualenv/issues/1910
        python3-distutils \
        # for psycopg
@@ -65,7 +67,7 @@ RUN apt-get update -qq \
        # for python-ldap
        libldap2-dev \
        libsasl2-dev \
-       # for older pillow versions
+       # need libjpeg to build older pillow versions
        libjpeg-dev \
     && rm -rf /var/lib/apt/lists/*
 

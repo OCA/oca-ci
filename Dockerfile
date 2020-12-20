@@ -78,14 +78,14 @@ ARG odoo_version
 
 # Install Odoo requirements (use ADD for correct layer caching)
 ADD https://raw.githubusercontent.com/OCA/OCB/$odoo_version/requirements.txt /tmp/ocb-requirements.txt
-RUN pip install --no-cache -r /tmp/ocb-requirements.txt
+RUN pip install --no-cache --no-binary psycopg2 -r /tmp/ocb-requirements.txt
 
 # Install other test requirements
-RUN pip install coverage websocket-client
+RUN pip install coverage websocket-client "odoo-autodiscover>=2 ; python_version<'3'"
 
 # Install Odoo (use ADD for correct layer caching)
 ADD https://api.github.com/repos/odoo/odoo/git/refs/heads/$odoo_version /tmp/odoo-version.json
-RUN git clone --depth=1 --branch=$odoo_version https://github.com/odoo/odoo /opt/odoo
+RUN git clone -q --depth=1 --branch=$odoo_version https://github.com/odoo/odoo /opt/odoo
 RUN pip install --no-cache  -e /opt/odoo \
     && pip list
 

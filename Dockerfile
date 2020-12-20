@@ -32,6 +32,7 @@ RUN curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add
     && rm -rf /var/lib/apt/lists/*
 RUN npm install -g rtlcss lessc
 
+# Install postgresql client
 RUN curl -sSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
     && echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -s -c`-pgdg main" > /etc/apt/sources.list.d/pgclient.list \
     && apt-get update -qq \
@@ -56,7 +57,8 @@ RUN apt-get update -qq \
        python$python_version-dev \
        # we need python 3 for our helper scripts
        python3 \
-       # virtualenv needs distutils https://github.com/pypa/virtualenv/issues/1910
+       # virtualenv needs distutils https://github.com/pypa/virtualenv/issues/1910,
+       # and why do distros split the python stdlib :/
        python3-distutils \
        # for psycopg
        libpq-dev \

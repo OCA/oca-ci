@@ -41,7 +41,6 @@ jobs:
           build-args: |
             python_version=${{ matrix.python_version }}
             odoo_version=${{ matrix.odoo_version }}
-            codename=${{ matrix.codename }}
           tags: |
             ghcr.io/${{ github.repository_owner }}/oca-ci/py${{ matrix.python_version }}-odoo${{matrix.odoo_version }}:latest
           labels: |

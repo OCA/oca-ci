@@ -7,7 +7,7 @@
 set -ex
 odoo_short_version=$(echo $ODOO_VERSION | cut -d '.' -f 1)
 touch test-requirements.txt
-for addon in $(addons --addons-dir "${ADDONS_DIR} --include "${INCLUDE}" --exclude "${EXCLUDE}" list) ; do
+for addon in $(addons --addons-dir "${ADDONS_DIR}" --include "${INCLUDE}" --exclude "${EXCLUDE}" list) ; do
     echo "-e file://${PWD}/setup/${addon}#egg=odoo${odoo_short_version}-addon-${addon}" >> test-requirements.txt
 done
 pip install -r test-requirements.txt

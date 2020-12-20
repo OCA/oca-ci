@@ -7,5 +7,5 @@
 set -ex
 $(which odoo || which openerp-server) \
   -d $PGDATABASE \
-  -i $(addons --addons-dir "${ADDONS_DIR} --include "${INCLUDE}" --exclude "${EXCLUDE}" list-depends) \
+  -i $(addons --addons-dir "${ADDONS_DIR}" --include "${INCLUDE}" --exclude "${EXCLUDE}" list-depends) \
   --stop-after-init

@@ -8,7 +8,7 @@ set -ex
 coverage run \
     $(which odoo || which openerp-server) \
     -d $PGDATABASE \
-    -i $(addons --addons-dir "${ADDONS_DIR} --include "${INCLUDE}" --exclude "${EXCLUDE}" list) \
+    -i $(addons --addons-dir "${ADDONS_DIR}" --include "${INCLUDE}" --exclude "${EXCLUDE}" list) \
     --test-enable \
     --stop-after-init
 

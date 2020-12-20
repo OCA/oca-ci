@@ -78,6 +78,8 @@ ARG odoo_version
 
 # Install Odoo requirements (use ADD for correct layer caching).
 # We use requirements from OCB for easier maintenance of older versions.
+# We use no-binary for psycopg2 because its binary wheels are sometimes broken
+# and not very portable.
 ADD https://raw.githubusercontent.com/OCA/OCB/$odoo_version/requirements.txt /tmp/ocb-requirements.txt
 RUN pip install --no-cache --no-binary psycopg2 -r /tmp/ocb-requirements.txt
 

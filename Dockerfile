@@ -78,7 +78,8 @@ RUN apt-get update -qq \
 RUN curl -sSL https://bootstrap.pypa.io/virtualenv.pyz -o /usr/local/share/virtualenv.pyz
 
 # Install the 'addons' helper script
-# TODO: move it out of acsoo to a standalone, OCA-managed package
+# TODO: move it out of acsoo to a standalone, OCA-managed package, that
+# could do additional addons manifest analysis such as checking license compatibility.
 RUN python3 /usr/local/share/virtualenv.pyz /opt/acsoo \
     && /opt/acsoo/bin/pip install acsoo==3.0.2
 COPY bin/addons /usr/local/bin

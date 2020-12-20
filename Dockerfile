@@ -54,6 +54,8 @@ RUN apt-get update -qq \
     && DEBIAN_FRONTEND=noninteractive apt-get install -qq --no-install-recommends \
        build-essential \
        python$python_version-dev \
+       # virtualenv needs distutils https://github.com/pypa/virtualenv/issues/1910
+       python3-distutils \
        # for psycopg
        libpq-dev \
        # for lxml

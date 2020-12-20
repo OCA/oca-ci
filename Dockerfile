@@ -76,7 +76,8 @@ ENV PATH=/opt/odoo-venv/bin:$PATH
 
 ARG odoo_version
 
-# Install Odoo requirements (use ADD for correct layer caching)
+# Install Odoo requirements (use ADD for correct layer caching).
+# We use requirements from OCB for easier maintenance of older versions.
 ADD https://raw.githubusercontent.com/OCA/OCB/$odoo_version/requirements.txt /tmp/ocb-requirements.txt
 RUN pip install --no-cache --no-binary psycopg2 -r /tmp/ocb-requirements.txt
 
@@ -84,8 +85,9 @@ RUN pip install --no-cache --no-binary psycopg2 -r /tmp/ocb-requirements.txt
 RUN pip install coverage websocket-client "odoo-autodiscover>=2 ; python_version<'3'"
 
 # Install Odoo (use ADD for correct layer caching)
-ADD https://api.github.com/repos/odoo/odoo/git/refs/heads/$odoo_version /tmp/odoo-version.json
-RUN git clone -q --depth=1 --branch=$odoo_version https://github.com/odoo/odoo /opt/odoo
+ARG odoo_org_repo=odoo/odoo
+ADD https://api.github.com/repos/$odoo_org_repo/git/refs/heads/$odoo_version /tmp/odoo-version.json
+RUN git clone -q --depth=1 --branch=$odoo_version https://github.com/$odoo_org_repo /opt/odoo
 RUN pip install --no-cache  -e /opt/odoo \
     && pip list
 

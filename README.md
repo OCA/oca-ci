@@ -2,11 +2,11 @@
 
 These images provide the following guarantees
 
-- Odoo runtime dependencies installed (wkhtmltopdf, lessc, etc)
-- Odoo shallow git clone in /opt/odoo
-- Odoo installed in a virtualenv isolated from system python packages
-- python, pip, odoo commands in PATH are from that virtualenv
-- start in an empty work directory
+- Odoo runtime dependencies are installed (wkhtmltopdf, lessc, etc).
+- A shallow git clone of Odoo is in /opt/odoo.
+- Odoo is installed in a virtualenv isolated from system python packages.
+- The python, pip and odoo commands found first in PATH are from that
+  virtualenv.
 
 Environment variables:
 
@@ -24,11 +24,12 @@ Environment variables:
 
 Available commands
 
-- `oca_install_addons`: install addons to test found in $ADDONS_DIR, and
-  their dependencies
-- `oca_init_test_database`: create a test database with direct dependencies of
-  addons to test
-- `oca_run_tests`: run tests with coverage
+- `oca_install_addons`: make addons to test (found in $ADDONS_DIR, modulo
+  $INCLUDE and $EXCLUDE) and their dependencies available in the Odoo addons
+  path
+- `oca_init_test_database`: create a test database named $PGDATABASE with
+  direct dependencies of addons to test installed in it
+- `oca_run_tests`: run tests of addons on $PGDATABASE, with coverage
 
 ## Build
 

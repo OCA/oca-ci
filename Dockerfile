@@ -71,18 +71,21 @@ RUN apt-get update -qq \
        libjpeg-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Make a virtualenv for Odoo so we isolate from system python dependencies
-# and make sure addons we'll install declare all their python dependencies properly
-RUN curl -sSL https://bootstrap.pypa.io/virtualenv.pyz -o /usr/local/share/virtualenv.pyz \
-    && python3 /usr/local/share/virtualenv.pyz -p python$python_version /opt/odoo-venv \
-    && /opt/odoo-venv/bin/pip list
-ENV PATH=/opt/odoo-venv/bin:$PATH
+# We don't use the ubuntu virtualenv package because it unbundles pip dependencies
+# in virtualenvs it create.
+RUN curl -sSL https://bootstrap.pypa.io/virtualenv.pyz -o /usr/local/share/virtualenv.pyz
 
 # Install the 'addons' helper script
 # TODO: move it out of acsoo to a standalone, OCA-managed package
 RUN python3 /usr/local/share/virtualenv.pyz /opt/acsoo \
     && /opt/acsoo/bin/pip install acsoo==3.0.2
 COPY bin/addons /usr/local/bin
+
+# Make a virtualenv for Odoo so we isolate from system python dependencies
+# and make sure addons we'll install declare all their python dependencies properly
+RUN python3 /usr/local/share/virtualenv.pyz -p python$python_version /opt/odoo-venv \
+    && /opt/odoo-venv/bin/pip list
+ENV PATH=/opt/odoo-venv/bin:$PATH
 
 ARG odoo_version
 
@@ -110,10 +113,14 @@ ENV PGHOST=postgres
 ENV PGUSER=odoo
 ENV PGPASSWORD=odoo
 ENV PGDATABASE=odoo
-ENV ADDONS_DIR=.
 ENV PIP_EXTRA_INDEX_URL=https://wheelhouse.odoo-community.org/oca-simple
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 ENV PIP_NO_PYTHON_VERSION_WARNING=1
-# comma-separated list of addons to include (default: all) and exclude (default: none)
+# Control addons discovery. INCLUDE and EXCLUDE are comma-separated list of
+# addons to include (default: all) and exclude (default: none)
+ENV ADDONS_DIR=.
 ENV INCLUDE=
 ENV EXCLUDE=
+
+RUN mkdir /build
+WORKDIR /build

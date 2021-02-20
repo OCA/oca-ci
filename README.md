@@ -15,7 +15,7 @@ Environment variables:
 - PGUSER=odoo
 - PGPASSWORD=odoo
 - PGDATABASE=odoo
-- PIP_EXTRA_INDEX_URL=https://wheelhouse.odoo-community.org/oca-simple
+- PIP_INDEX_URL=https://wheelhouse.odoo-community.org/oca-simple-and-pypi
 - PIP_DISABLE_PIP_VERSION_CHECK=1
 - PIP_NO_PYTHON_VERSION_WARNING=1
 - ADDONS_DIR=.

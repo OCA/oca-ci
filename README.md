@@ -1,6 +1,13 @@
-# Container image to run OCA CI tests and runbot
+# Container image to run OCA CI tests
 
-These images provide the following guarantees
+⚠️ These images are meant for running CI tests of the Odoo Community
+Association. They are *not* intended for any other purpose, and in particular
+they are not fit for running Odoo in production. If you decide to base your own
+CI on these images, be aware that, while we will not break things without
+reason, we will prioritize ease of maintenance for OCA over backward
+compatibility. ⚠️
+
+These images provide the following guarantees:
 
 - Odoo runtime dependencies are installed (wkhtmltopdf, lessc, etc).
 - A shallow git clone of Odoo is in /opt/odoo.
@@ -22,14 +29,14 @@ Environment variables:
 - INCLUDE=
 - EXCLUDE=
 
-Available commands
+Available commands:
 
-- `oca_install_addons`: make addons to test (found in $ADDONS_DIR, modulo
-  $INCLUDE and $EXCLUDE) and their dependencies available in the Odoo addons
-  path
+- `oca_install_addons`: make addons to test (found in `$ADDONS_DIR, modulo
+  `$INCLUDE` an `$EXCLUDE`) and their dependencies available in the Odoo addons
+  path.
 - `oca_init_test_database`: create a test database named $PGDATABASE with
   direct dependencies of addons to test installed in it
-- `oca_run_tests`: run tests of addons on $PGDATABASE, with coverage
+- `oca_run_tests`: run tests of addons on $PGDATABASE, with coverage.
 
 ## Build
 

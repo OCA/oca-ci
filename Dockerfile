@@ -109,6 +109,11 @@ RUN git clone -q --depth=1 --branch=$odoo_version https://github.com/$odoo_org_r
 RUN pip install --no-cache  -e /opt/odoo \
     && pip list
 
+# Make an empty odoo.cfg
+RUN echo "[options]" > /etc/odoo.cfg
+ENV ODOO_RC=/etc/odoo.cfg
+ENV OPENERP_SERVER=/etc/odoo.cfg
+
 COPY bin/* /usr/local/bin/
 
 ENV ODOO_VERSION=$odoo_version

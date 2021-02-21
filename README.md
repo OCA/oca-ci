@@ -12,12 +12,15 @@ These images provide the following guarantees:
 - Odoo runtime dependencies are installed (`wkhtmltopdf`, `lessc`, etc).
 - A shallow git clone of Odoo is in `/opt/odoo`.
 - Odoo is installed in a virtualenv isolated from system python packages.
+- The Odoo configuration file exists at `$ODOO_RC`.
 - The `python`, `pip` and `odoo` (`openerp-server` for Odoo < 10) commands
   found first in `PATH` are from that virtualenv.
 
 Environment variables:
 
 - `ODOO_VERSION` (8.0, ..., 14.0, ...)
+- `ODOO_RC`
+- `OPENERP_SERVER=$ODOO_RC`
 - `PGHOST=postgres`
 - `PGUSER=odoo`
 - `PGPASSWORD=odoo`

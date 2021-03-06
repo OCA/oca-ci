@@ -94,7 +94,10 @@ RUN pip install coverage websocket-client "odoo-autodiscover>=2 ; python_version
 # Install Odoo (use ADD for correct layer caching)
 ARG odoo_org_repo=odoo/odoo
 ADD https://api.github.com/repos/$odoo_org_repo/git/refs/heads/$odoo_version /tmp/odoo-version.json
-RUN git clone -q --depth=1 --branch=$odoo_version https://github.com/$odoo_org_repo /opt/odoo
+RUN mkdir /tmp/getodoo \
+    && (curl -sSL https://github.com/$odoo_org_repo/tarball/$odoo_version | tar -C /tmp/getodoo -xz) \
+    && mv /tmp/getodoo/* /opt/odoo \
+    && rmdir /tmp/getodoo
 RUN pip install --no-cache  -e /opt/odoo \
     && pip list
 

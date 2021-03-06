@@ -2,11 +2,11 @@
 
 #
 # Initialize the test database, will all direct dependencies of addons to test
-# installed.
+# installed. Use unbuffer to get a colored output.
 #
 
 set -ex
-$(which odoo || which openerp-server) \
+unbuffer $(which odoo || which openerp-server) \
   -d $PGDATABASE \
   -i $(addons --addons-dir "${ADDONS_DIR}" --include "${INCLUDE}" --exclude "${EXCLUDE}" list-depends) \
   --stop-after-init

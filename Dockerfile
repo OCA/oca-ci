@@ -14,6 +14,7 @@ RUN apt-get update -qq \
         gnupg \
         lsb-release \
         software-properties-common \
+        expect-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install wkhtml

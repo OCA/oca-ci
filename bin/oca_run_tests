@@ -1,11 +1,11 @@
 #!/bin/bash
 
 #
-# Run tests.
+# Run tests. Use unbuffer to get a colored output
 #
 
 set -ex
-coverage run \
+unbuffer coverage run \
     $(which odoo || which openerp-server) \
     -d $PGDATABASE \
     -i $(addons --addons-dir "${ADDONS_DIR}" --include "${INCLUDE}" --exclude "${EXCLUDE}" list) \

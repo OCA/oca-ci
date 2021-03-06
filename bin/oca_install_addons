@@ -12,4 +12,4 @@ for addon in $(addons --addons-dir "${ADDONS_DIR}" --include "${INCLUDE}" --excl
 done
 pip install -r test-requirements.txt
 pip list
-apt install --no-install-recommends -y $(oca_list_external_dependencies deb)
+DEBIAN_FRONTEND=noninteractive apt-get install -qq --no-install-recommends $(oca_list_external_dependencies deb)

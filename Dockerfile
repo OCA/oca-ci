@@ -89,7 +89,7 @@ ADD https://raw.githubusercontent.com/OCA/OCB/$odoo_version/requirements.txt /tm
 RUN pip install --no-cache-dir --no-binary psycopg2 -r /tmp/ocb-requirements.txt
 
 # Install other test requirements
-RUN pip install coverage websocket-client "odoo-autodiscover>=2 ; python_version<'3'"
+RUN pip install coverage "odoo-autodiscover>=2 ; python_version<'3'"
 
 # Install Odoo (use ADD for correct layer caching)
 ARG odoo_org_repo=odoo/odoo

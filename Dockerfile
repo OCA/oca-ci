@@ -39,13 +39,6 @@ RUN curl -sSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
     && DEBIAN_FRONTEND=noninteractive apt-get install -qq postgresql-client-12 \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Google Chrome
-RUN curl -sSL http://nightly.odoo.com/odoo.key | apt-key add - \
-    && echo "deb http://nightly.odoo.com/deb/$(lsb_release -s -c) ./" > /etc/apt/sources.list.d/google-chrome.list \
-    && apt-get update -qq \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -qq google-chrome-stable=80.0.3987.116-1 \
-    && rm -rf /var/lib/apt/lists/*
-
 RUN add-apt-repository -y ppa:deadsnakes/ppa
 
 ARG python_version

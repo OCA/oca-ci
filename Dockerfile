@@ -86,7 +86,7 @@ ARG odoo_version
 # We use no-binary for psycopg2 because its binary wheels are sometimes broken
 # and not very portable.
 ADD https://raw.githubusercontent.com/OCA/OCB/$odoo_version/requirements.txt /tmp/ocb-requirements.txt
-RUN pip install --no-cache --no-binary psycopg2 -r /tmp/ocb-requirements.txt
+RUN pip install --no-cache-dir --no-binary psycopg2 -r /tmp/ocb-requirements.txt
 
 # Install other test requirements
 RUN pip install coverage websocket-client "odoo-autodiscover>=2 ; python_version<'3'"
@@ -98,7 +98,7 @@ RUN mkdir /tmp/getodoo \
     && (curl -sSL https://github.com/$odoo_org_repo/tarball/$odoo_version | tar -C /tmp/getodoo -xz) \
     && mv /tmp/getodoo/* /opt/odoo \
     && rmdir /tmp/getodoo
-RUN pip install --no-cache  -e /opt/odoo \
+RUN pip install --no-cache-dir -e /opt/odoo \
     && pip list
 
 # Make an empty odoo.cfg

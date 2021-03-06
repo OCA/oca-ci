@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+"""Print external dependencies of addons available in odoo.addons.__path__."""
+import argparse
+import ast
+
+try:
+    from openerp.modules import module
+except ImportError:
+    from odoo.modules import module
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="List external dependencies of Odoo addons."
+    )
+    parser.add_argument("deptype", metavar="TYPE", help="External dependency type")
+    args = parser.parse_args()
+    dependencies = set()
+    for addon_name in module.get_modules():
+        addon_dir = module.get_module_path(addon_name)
+        manifest_path = module.module_manifest(addon_dir)
+        if not manifest_path:
+            continue
+        with open(manifest_path) as f:
+            try:
+                manifest = ast.literal_eval(f.read())
+            except SyntaxError:
+                continue
+        if not manifest.get("installable", True):
+            continue
+        dependencies.update(
+            manifest.get("external_dependencies", {}).get(args.deptype, [])
+        )
+    for dependency in sorted(dependencies):
+        print(dependency)
+
+
+if __name__ == "__main__":
+    main()

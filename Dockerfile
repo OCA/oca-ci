@@ -14,31 +14,27 @@ RUN apt-get update -qq \
         gnupg \
         lsb-release \
         software-properties-common \
-        expect-dev \
-    && rm -rf /var/lib/apt/lists/*
+        expect-dev
 
 # Install wkhtml
 RUN curl -sSL https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.$(lsb_release -c -s)_amd64.deb -o /tmp/wkhtml.deb \
     && apt-get update -qq \
     && dpkg --force-depends -i /tmp/wkhtml.deb \
     && DEBIAN_FRONTEND=noninteractive apt-get install -qq -f --no-install-recommends \
-    && rm /tmp/wkhtml.deb \
-    && rm -rf /var/lib/apt/lists/*
+    && rm /tmp/wkhtml.deb
 
 # Install nodejs
 RUN curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
     && echo "deb https://deb.nodesource.com/node_15.x `lsb_release -c -s` main" > /etc/apt/sources.list.d/nodesource.list \
     && apt-get update -qq \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -qq nodejs \
-    && rm -rf /var/lib/apt/lists/*
+    && DEBIAN_FRONTEND=noninteractive apt-get install -qq nodejs
 RUN npm install -g rtlcss lessc
 
 # Install postgresql client
 RUN curl -sSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
     && echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -s -c`-pgdg main" > /etc/apt/sources.list.d/pgclient.list \
     && apt-get update -qq \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -qq postgresql-client-12 \
-    && rm -rf /var/lib/apt/lists/*
+    && DEBIAN_FRONTEND=noninteractive apt-get install -qq postgresql-client-12
 
 RUN add-apt-repository -y ppa:deadsnakes/ppa
 
@@ -64,8 +60,7 @@ RUN apt-get update -qq \
        libldap2-dev \
        libsasl2-dev \
        # need libjpeg to build older pillow versions
-       libjpeg-dev \
-    && rm -rf /var/lib/apt/lists/*
+       libjpeg-dev
 
 # We don't use the ubuntu virtualenv package because it unbundles pip dependencies
 # in virtualenvs it create.

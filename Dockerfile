@@ -70,7 +70,7 @@ RUN curl -sSL https://bootstrap.pypa.io/virtualenv.pyz -o /usr/local/share/virtu
 # TODO: move it out of acsoo to a standalone, OCA-managed package, that
 # could do additional addons manifest analysis such as checking license compatibility.
 RUN python3 /usr/local/share/virtualenv.pyz /opt/acsoo \
-    && /opt/acsoo/bin/pip install acsoo==3.0.2
+    && /opt/acsoo/bin/pip install --no-cache-dir acsoo==3.0.2
 COPY bin/addons /usr/local/bin
 
 # Make a virtualenv for Odoo so we isolate from system python dependencies
@@ -89,7 +89,7 @@ ADD https://raw.githubusercontent.com/OCA/OCB/$odoo_version/requirements.txt /tm
 RUN pip install --no-cache-dir --no-binary psycopg2 -r /tmp/ocb-requirements.txt
 
 # Install other test requirements
-RUN pip install coverage "odoo-autodiscover>=2 ; python_version<'3'"
+RUN pip install --no-cache-dir coverage "odoo-autodiscover>=2 ; python_version<'3'"
 
 # Install Odoo (use ADD for correct layer caching)
 ARG odoo_org_repo=odoo/odoo

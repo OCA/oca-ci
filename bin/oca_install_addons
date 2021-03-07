@@ -18,6 +18,7 @@ for addon in $(addons --addons-dir "${ADDONS_DIR}" --include "${INCLUDE}" --excl
     echo "-e file://${PWD}/setup/${addon}#egg=odoo${odoo_short_version}-addon-${addon}" >> test-requirements.txt
 done
 pip install -r test-requirements.txt
+pip config list
 pip list
 
 # Install 'deb' external dependencies of all Odoo addons found in path.

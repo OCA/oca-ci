@@ -11,6 +11,7 @@ set -ex
 # which significantly slows down installation in repos with many addons.
 pip install setuptools-odoo
 
+# Install addons in current repo in editable mode, so coverage will see them.
 odoo_short_version=$(echo $ODOO_VERSION | cut -d '.' -f 1)
 touch test-requirements.txt
 for addon in $(addons --addons-dir "${ADDONS_DIR}" --include "${INCLUDE}" --exclude "${EXCLUDE}" --separator " " list) ; do
@@ -18,4 +19,6 @@ for addon in $(addons --addons-dir "${ADDONS_DIR}" --include "${INCLUDE}" --excl
 done
 pip install -r test-requirements.txt
 pip list
+
+# Install 'deb' external dependencies of all Odoo addons found in path.
 DEBIAN_FRONTEND=noninteractive apt-get install -qq --no-install-recommends $(oca_list_external_dependencies deb)

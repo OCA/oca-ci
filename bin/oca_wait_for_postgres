@@ -1,0 +1,6 @@
+#!/bin/bash
+until pg_isready
+do
+    echo "Waiting for postgres..."
+    sleep 2
+done

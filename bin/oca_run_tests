@@ -5,6 +5,9 @@
 #
 
 set -ex
+
+oca_wait_for_postgres
+
 unbuffer coverage run \
     $(which odoo || which openerp-server) \
     -d $PGDATABASE \

@@ -9,10 +9,10 @@ set -ex
 # Pre-install setuptools-odoo as an optimization. Without this,
 # setuptools-odoo will be installed repeatedly for each addon in the repo
 # which significantly slows down installation in repos with many addons.
+pip install "setuptools-odoo>=2.7"
 # Disable the post versioning strategy as we don't need the exact versions
-# and this also significantly speeds-up installation.
+# and this also speeds-up installation a little bit.
 export SETUPTOOLS_ODOO_POST_VERSION_STRATEGY_OVERRIDE=none
-pip install "setuptools-odoo @ git+https://github.com/acsone/setuptools-odoo"
 
 # Install addons in current repo in editable mode, so coverage will see them.
 odoo_short_version=$(echo $ODOO_VERSION | cut -d '.' -f 1)

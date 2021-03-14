@@ -1,18 +1,21 @@
 #!/bin/bash
 
 #
-# Run tests. Use unbuffer to get a colored output
+# Run tests. Use unbuffer to get a colored output.
 #
 
 set -ex
 
 oca_wait_for_postgres
 
+ADDONS=$(addons --addons-dir ${ADDONS_DIR} --include "${INCLUDE}" --exclude "${EXCLUDE}" list)
+if [ -z "$ADDONS" ]; then
+    exit 0
+fi
+
 unbuffer coverage run \
     $(which odoo || which openerp-server) \
-    -d $PGDATABASE \
-    -i $(addons --addons-dir "${ADDONS_DIR}" --include "${INCLUDE}" --exclude "${EXCLUDE}" list) \
+    -d ${PGDATABASE} \
+    -i ${ADDONS} \
     --test-enable \
     --stop-after-init
-
-# TODO do we need to check for errors in test output?

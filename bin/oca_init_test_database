@@ -9,7 +9,9 @@ set -ex
 
 oca_wait_for_postgres
 
+ADDONS=$(addons --addons-dir ${ADDONS_DIR} --include "${INCLUDE}" --exclude "${EXCLUDE}" list-depends)
+
 unbuffer $(which odoo || which openerp-server) \
-  -d $PGDATABASE \
-  -i $(addons --addons-dir "${ADDONS_DIR}" --include "${INCLUDE}" --exclude "${EXCLUDE}" list-depends) \
+  -d ${PGDATABASE} \
+  -i ${ADDONS:-base} \
   --stop-after-init

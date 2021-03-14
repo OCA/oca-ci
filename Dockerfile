@@ -73,6 +73,11 @@ RUN python3 /usr/local/share/virtualenv.pyz /opt/acsoo \
     && /opt/acsoo/bin/pip install --no-cache-dir acsoo==3.0.2
 COPY bin/addons /usr/local/bin
 
+# Install setuptools-odoo-get-requirements helper script
+RUN python3 /usr/local/share/virtualenv.pyz /opt/setuptools-odoo \
+    && /opt/setuptools-odoo/bin/pip install --no-cache-dir "setuptools-odoo>=2.7" \
+    && ln -s /opt/setuptools-odoo/bin/setuptools-odoo-get-requirements /usr/local/bin/
+
 # Make a virtualenv for Odoo so we isolate from system python dependencies
 # and make sure addons we'll install declare all their python dependencies properly
 RUN python3 /usr/local/share/virtualenv.pyz -p python$python_version /opt/odoo-venv \

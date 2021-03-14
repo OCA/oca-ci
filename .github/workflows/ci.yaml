@@ -2,7 +2,8 @@ name: ci
 
 on:
   push:
-    branches: master
+    branches:
+      - master
   schedule:
     - cron: "0 4 * * *"
 
@@ -15,20 +16,68 @@ jobs:
         include:
           - python_version: "2.7"
             odoo_version: "8.0"
+            odoo_org_repo: "odoo/odoo"
+            image_name: py2.7-odoo8.0
           - python_version: "2.7"
             odoo_version: "9.0"
+            odoo_org_repo: "odoo/odoo"
+            image_name: py2.7-odoo9.0
           - python_version: "2.7"
             odoo_version: "10.0"
+            odoo_org_repo: "odoo/odoo"
+            image_name: py2.7-odoo10.0
           - python_version: "3.5"
             odoo_version: "11.0"
+            odoo_org_repo: "odoo/odoo"
+            image_name: py3.5-odoo11.0
           - python_version: "3.6"
             odoo_version: "12.0"
+            odoo_org_repo: "odoo/odoo"
+            image_name: py3.6-odoo12.0
           - python_version: "3.6"
             odoo_version: "13.0"
+            odoo_org_repo: "odoo/odoo"
+            image_name: py3.6-odoo13.0
           - python_version: "3.6"
             odoo_version: "14.0"
+            odoo_org_repo: "odoo/odoo"
+            image_name: py3.6-odoo14.0
           - python_version: "3.8"
             odoo_version: "14.0"
+            odoo_org_repo: "odoo/odoo"
+            image_name: py3.8-odoo14.0
+          - python_version: "2.7"
+            odoo_version: "8.0"
+            odoo_org_repo: "oca/ocb"
+            image_name: py2.7-ocb8.0
+          - python_version: "2.7"
+            odoo_version: "9.0"
+            odoo_org_repo: "oca/ocb"
+            image_name: py2.7-ocb9.0
+          - python_version: "2.7"
+            odoo_version: "10.0"
+            odoo_org_repo: "oca/ocb"
+            image_name: py2.7-ocb10.0
+          - python_version: "3.5"
+            odoo_version: "11.0"
+            odoo_org_repo: "oca/ocb"
+            image_name: py3.5-ocb11.0
+          - python_version: "3.6"
+            odoo_version: "12.0"
+            odoo_org_repo: "oca/ocb"
+            image_name: py3.6-ocb12.0
+          - python_version: "3.6"
+            odoo_version: "13.0"
+            odoo_org_repo: "oca/ocb"
+            image_name: py3.6-ocb13.0
+          - python_version: "3.6"
+            odoo_version: "14.0"
+            odoo_org_repo: "oca/ocb"
+            image_name: py3.6-ocb14.0
+          - python_version: "3.8"
+            odoo_version: "14.0"
+            odoo_org_repo: "oca/ocb"
+            image_name: py3.8-ocb14.0
     steps:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -45,12 +94,13 @@ jobs:
           build-args: |
             python_version=${{ matrix.python_version }}
             odoo_version=${{ matrix.odoo_version }}
+            odoo_org_repo=${{ matrix.odoo_org_repo }}
           tags: |
-            ghcr.io/${{ github.repository_owner }}/oca-ci/py${{ matrix.python_version }}-odoo${{matrix.odoo_version }}:latest
+            ghcr.io/${{ github.repository_owner }}/oca-ci/${{ matrix.image_name }}:latest
           labels: |
             org.opencontainers.image.source=${{ github.event.repository.html_url }}
           push: true
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/oca-ci/py${{ matrix.python_version }}-odoo${{matrix.odoo_version }}:latest
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/oca-ci/${{ matrix.image_name }}:latest
           cache-to: type=inline
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

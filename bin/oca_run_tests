@@ -13,7 +13,7 @@ if [ -z "$ADDONS" ]; then
     exit 0
 fi
 
-unbuffer coverage run \
+unbuffer coverage run --include "${ADDONS_DIR}/*" --branch \
     $(which odoo || which openerp-server) \
     -d ${PGDATABASE} \
     -i ${ADDONS} \

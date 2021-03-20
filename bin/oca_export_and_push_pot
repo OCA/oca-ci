@@ -6,8 +6,8 @@
 
 set -ex
 
-pip install click-odoo-contrib
-click-odoo-makepot --addons-dir ${ADDONS_DIR} -d ${PGDATABASE} --msgmerge-if-new-pot --commit --log-level=debug
 git config user.name ${OCA_GIT_USER_NAME}
 git config user.email ${OCA_GIT_USER_EMAIL}
+pip install click-odoo-contrib
+click-odoo-makepot --addons-dir ${ADDONS_DIR} -d ${PGDATABASE} --msgmerge-if-new-pot --commit --log-level=debug
 git push

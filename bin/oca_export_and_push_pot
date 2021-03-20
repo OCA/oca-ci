@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#
+# Export .pot translations template for installed addons and git push changes.
+#
+
+set -ex
+
+pip install click-odoo-makepot
+click-odoo-makepot -d ${PGDATABASE} --msgmerge-if-new-pot --commit --log-level=debug
+git config user.name ${OCA_GIT_USER_NAME}
+git config user.email ${OCA_GIT_USER_EMAIL}
+git push

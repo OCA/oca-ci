@@ -31,6 +31,9 @@ Environment variables:
 - `ADDONS_DIR=.`
 - `INCLUDE=`
 - `EXCLUDE=`
+- `OCA_GIT_USER_NAME=ci-user`: git user name to push .pot files
+- `OCA_GIT_USER_EMAIL=ci-user@odoo-community.org`: git user email to push .pot
+  files
 
 Available commands:
 

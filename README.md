@@ -31,8 +31,8 @@ Environment variables:
 - `ADDONS_DIR=.`
 - `INCLUDE=`
 - `EXCLUDE=`
-- `OCA_GIT_USER_NAME=ci-user`: git user name to push `.pot` files
-- `OCA_GIT_USER_EMAIL=ci-user@odoo-community.org`: git user email to push
+- `OCA_GIT_USER_NAME=oca-ci`: git user name to push `.pot` files
+- `OCA_GIT_USER_EMAIL=oca-ci@odoo-community.org`: git user email to push
   `.pot` files
 
 Available commands:
@@ -43,8 +43,9 @@ Available commands:
 - `oca_init_test_database`: create a test database named `$PGDATABASE` with
   direct dependencies of addons to test installed in it
 - `oca_run_tests`: run tests of addons on `$PGDATABASE`, with coverage.
-- `oca_export_and_push_pot`: export `.pot` files for all addons in
-  `$ADDONS_DIR` that are installed in `$PGDATABASE`; git push changes if any.
+- `oca_export_and_commit_pot`: export `.pot` files for all addons in
+  `$ADDONS_DIR` that are installed in `$PGDATABASE`; git commit changes if any,
+  using `$OCA_GIT_USER_NAME` and `$OCA_GIT_USER_EMAIL`.
 
 ## Build
 

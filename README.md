@@ -10,8 +10,8 @@ compatibility. ⚠️
 These images provide the following guarantees:
 
 - Odoo runtime dependencies are installed (`wkhtmltopdf`, `lessc`, etc).
-- A shallow git clone of Odoo is in `/opt/odoo`.
-- Odoo is installed in a virtualenv isolated from system python packages.
+- Odoo source code is in `/opt/odoo`.
+- Odoo is installed in editable mode in a virtualenv isolated from system python packages.
 - The Odoo configuration file exists at `$ODOO_RC`.
 - The `python`, `pip` and `odoo` (`openerp-server` for Odoo < 10) commands
   found first in `PATH` are from that virtualenv.
@@ -31,8 +31,8 @@ Environment variables:
 - `ADDONS_DIR=.`
 - `INCLUDE=`
 - `EXCLUDE=`
-- `OCA_GIT_USER_NAME=oca-ci`: git user name to push `.pot` files
-- `OCA_GIT_USER_EMAIL=oca-ci@odoo-community.org`: git user email to push
+- `OCA_GIT_USER_NAME=oca-ci`: git user name to commit `.pot` files
+- `OCA_GIT_USER_EMAIL=oca-ci@odoo-community.org`: git user email to commit
   `.pot` files
 
 Available commands:

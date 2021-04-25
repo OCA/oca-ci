@@ -96,11 +96,11 @@ jobs:
             odoo_version=${{ matrix.odoo_version }}
             odoo_org_repo=${{ matrix.odoo_org_repo }}
           tags: |
-            ghcr.io/${{ github.repository_owner }}/oca-ci/${{ matrix.image_name }}:latest
+            ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
           labels: |
             org.opencontainers.image.source=${{ github.event.repository.html_url }}
           push: true
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/oca-ci/${{ matrix.image_name }}:latest
+          cache-from: type=registry,ref=ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
           cache-to: type=inline
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

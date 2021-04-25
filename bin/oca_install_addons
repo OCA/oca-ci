@@ -4,7 +4,7 @@
 # Install dependencies of addons to test, and add addons to test to Odoo's addons_path.
 #
 # An alternative technique would be to install all addons with `pip install --editable`
-# but it is relatively slow in repos with a a larger number of addons.
+# but it is relatively slow in repos with a large number of addons.
 #
 
 set -ex

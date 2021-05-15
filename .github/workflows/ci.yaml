@@ -104,7 +104,7 @@ jobs:
           cache-from: type=registry,ref=ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
           cache-to: type=inline
       - name: Tests
-        run: docker run -v $PWD/tests:/mnt/tests ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest /mnt/tests/runtests.sh
+        run: docker run -v ./tests:/mnt/tests ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest /mnt/tests/runtests.sh
       - name: Push image
         run: docker push ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
         if: ${{ github.repository_owner == 'OCA' && github.ref == 'refs/heads/master' }}

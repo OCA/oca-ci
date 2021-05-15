@@ -89,6 +89,24 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build image
+        uses: docker/build-push-action@v2
+        with:
+          build-args: |
+            python_version=${{ matrix.python_version }}
+            odoo_version=${{ matrix.odoo_version }}
+            odoo_org_repo=${{ matrix.odoo_org_repo }}
+          tags: |
+            ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
+          labels: |
+            org.opencontainers.image.source=${{ github.event.repository.html_url }}
+          cache-from: type=registry,ref=ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          load: true
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Tests
+        run: docker run -v ${PWD}/tests:/mnt/tests ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest /mnt/tests/runtests.sh -v
+      - name: Push image
         id: docker_build
         uses: docker/build-push-action@v2
         with:
@@ -100,15 +118,8 @@ jobs:
             ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
           labels: |
             org.opencontainers.image.source=${{ github.event.repository.html_url }}
-          load: true
-          cache-from: type=registry,ref=ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=inline
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Tests
-        run: docker run -v ${PWD}/tests:/mnt/tests ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest /mnt/tests/runtests.sh -v
-      - name: Push image
-        run: docker push ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
-        if: ${{ github.repository_owner == 'OCA' && github.ref == 'refs/heads/master' }}
+          push: true
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

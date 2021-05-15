@@ -55,3 +55,13 @@ Build args:
 - odoo_version (no default)
 - codename (default: focal)
 - odoo_org_repo (default: odoo/odoo)
+
+## Tests
+
+Tests are written using [pytest](https://pytest.org) in the `tests` directory.
+
+You can run them using the `runtests.sh` script inside the container, like this:
+
+```console
+docker run -v $PWD/tests:/mnt/tests ghcr.io/oca/oca-ci/py3.8-odoo14.0:latest /mnt/tests/runtests.sh -v
+```

@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+  pull_request:
   schedule:
     - cron: "0 4 * * *"
 
@@ -99,8 +100,13 @@ jobs:
             ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
           labels: |
             org.opencontainers.image.source=${{ github.event.repository.html_url }}
-          push: true
+          load: true
           cache-from: type=registry,ref=ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
           cache-to: type=inline
+      - name: Tests
+        run: docker run -it --rm -v $PWD/tests:/mnt/tests ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest /mnt/tests/runtests.sh
+      - name: Push image
+        run: docker push ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
+        if: ${{ github.repository_owner == 'OCA' && github.ref == 'refs/heads/master' }}
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

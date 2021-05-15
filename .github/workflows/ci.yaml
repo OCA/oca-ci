@@ -107,7 +107,6 @@ jobs:
       - name: Tests
         run: docker run -v ${PWD}/tests:/mnt/tests ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest /mnt/tests/runtests.sh -v
       - name: Push image
-        id: docker_build
         uses: docker/build-push-action@v2
         with:
           build-args: |
@@ -122,5 +121,3 @@ jobs:
           cache-to: type=inline
           push: true
         if: ${{ github.repository_owner == 'OCA' && github.ref == 'refs/heads/master' }}
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}

@@ -47,9 +47,7 @@ RUN apt-get update -qq \
        python$python_version-dev \
        # we need python 3 for our helper scripts
        python3 \
-       # virtualenv needs distutils https://github.com/pypa/virtualenv/issues/1910,
-       # and why do distros split the python stdlib :/
-       python3-distutils \
+       python3-venv \
        # for psycopg
        libpq-dev \
        # for lxml
@@ -62,25 +60,29 @@ RUN apt-get update -qq \
        # need libjpeg to build older pillow versions
        libjpeg-dev
 
+# Install pipx, which we use to install other python tools.
+ENV PIPX_BIN_DIR=/usr/local/bin
+ENV PIPX_DEFAULT_PYTHON=/usr/bin/python3
+RUN python3 -m venv /opt/pipx-venv \
+    && /opt/pipx-venv/bin/pip install --no-cache-dir pipx \
+    && ln -s /opt/pipx-venv/bin/pipx /usr/local/bin/
+
 # We don't use the ubuntu virtualenv package because it unbundles pip dependencies
 # in virtualenvs it create.
-RUN curl -sSL https://bootstrap.pypa.io/virtualenv.pyz -o /usr/local/share/virtualenv.pyz
+RUN pipx install --pip-args="--no-cache-dir" virtualenv
 
 # Install the 'addons' helper script
 # TODO: move it out of acsoo to a standalone, OCA-managed package, that
 # could do additional addons manifest analysis such as checking license compatibility.
-RUN python3 /usr/local/share/virtualenv.pyz /opt/acsoo \
-    && /opt/acsoo/bin/pip install --no-cache-dir acsoo==3.0.2
+RUN pipx install --pip-args="--no-cache-dir" acsoo==3.0.2
 COPY bin/addons /usr/local/bin
 
 # Install setuptools-odoo-get-requirements helper script
-RUN python3 /usr/local/share/virtualenv.pyz /opt/setuptools-odoo \
-    && /opt/setuptools-odoo/bin/pip install --no-cache-dir "setuptools-odoo>=2.7.1" \
-    && ln -s /opt/setuptools-odoo/bin/setuptools-odoo-get-requirements /usr/local/bin/
+RUN pipx install --pip-args="--no-cache-dir" "setuptools-odoo>=2.7.1"
 
-# Make a virtualenv for Odoo so we isolate from system python dependencies
-# and make sure addons we'll install declare all their python dependencies properly
-RUN python3 /usr/local/share/virtualenv.pyz -p python$python_version /opt/odoo-venv \
+# Make a virtualenv for Odoo so we isolate from system python dependencies and
+# make sure addons we test declare all their python dependencies properly
+RUN virtualenv -p python$python_version /opt/odoo-venv \
     && /opt/odoo-venv/bin/pip list
 ENV PATH=/opt/odoo-venv/bin:$PATH
 

@@ -71,9 +71,11 @@ RUN python3 -m venv /opt/pipx-venv \
 # in virtualenvs it create.
 RUN pipx install --pip-args="--no-cache-dir" virtualenv
 
+# We use manifestoo to check licenses, development status
+RUN pipx install --pip-args="--no-cache-dir" manifestoo
+
 # Install the 'addons' helper script
-# TODO: move it out of acsoo to a standalone, OCA-managed package, that
-# could do additional addons manifest analysis such as checking license compatibility.
+# TODO: use manifestoo
 RUN pipx install --pip-args="--no-cache-dir" acsoo==3.0.2
 COPY bin/addons /usr/local/bin
 

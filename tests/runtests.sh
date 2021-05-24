@@ -6,8 +6,8 @@ set -e
 # which is assumed to be mounted somewhere in the docker image.
 
 here=$(dirname $0)
-testvenv=/tmp/testsvenv 
+testvenv=/tmp/testvenv 
 
-python3.8 /usr/local/share/virtualenv.pyz -p python3 $testvenv
+virtualenv -p python3 $testvenv
 $testvenv/bin/pip install pytest
 $testvenv/bin/pytest --color=yes $here "$@"

@@ -1,3 +1,7 @@
 #!/usr/bin/bash
-"""Print external dependencies of addons available in odoo.addons.__path__."""
+#
+# Print transitive external dependencies of addons in $ADDONS_DIR.
+# For the transitive search to work, dependencie must be available in
+# the Odoo addons path.
+#
 manifestoo -d $ADDONS_DIR list-external-dependencies $1 --transitive

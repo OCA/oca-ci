@@ -19,12 +19,12 @@ def test_wkhtomtopdf_in_path():
 
 
 def test_python_in_path():
-    shutil.which("python")
+    assert shutil.which("python")
     assert Path(shutil.which("python")).parent == Path(shutil.which(odoo_bin)).parent
 
 
 def test_pip_in_path():
-    shutil.which("pip")
+    assert shutil.which("pip")
     assert Path(shutil.which("pip")).parent == Path(shutil.which(odoo_bin)).parent
 
 

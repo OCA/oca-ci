@@ -79,6 +79,15 @@ jobs:
             odoo_version: "14.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.8-ocb14.0
+    services:
+      postgres:
+        image: postgres:9.6
+        env:
+          POSTGRES_USER: odoo
+          POSTGRES_PASSWORD: odoo
+          POSTGRES_DB: odoo
+        ports:
+          - 5432:5432
     steps:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1

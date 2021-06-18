@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -e
+
 until pg_isready
 do
     echo "Waiting for postgres..."

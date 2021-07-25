@@ -1,5 +1,5 @@
 import subprocess
-from .common import install_test_addons, dropdb
+from .common import install_test_addons, dropdb, did_run_test_module
 
 
 def test_success():
@@ -10,5 +10,4 @@ def test_success():
         result = subprocess.check_output(
             ["oca_run_tests"], cwd=addons_dir, text=True
         )
-        print(result)
-        assert "odoo.addons.addon_success.tests.test_success" in result
+        assert did_run_test_module(result, "addon_success.tests.test_success")

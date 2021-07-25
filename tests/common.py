@@ -70,3 +70,11 @@ def install_test_addons(test_addons):
 
 def dropdb():
     subprocess.check_call(["dropdb", "--if-exists", os.environ["PGDATABASE"]])
+
+
+def did_run_test_module(output, test_module):
+    """Check that a test did run by looking in the Odoo log.
+    
+    test_module is the full name of the test (addon_name.tests.test_module).
+    """
+    return "odoo.addons." + test_module in output

@@ -40,6 +40,11 @@ def preserve_odoo_venv():
 
 @contextlib.contextmanager
 def make_addons_dir(test_addons):
+    """Copy test addons to a temporary directory.
+
+    Adjust the addons version to match the Odoo version being tested.
+    Rename __manifest__.py to __openerp__.py for older Odoo versions.
+    """
     with tempfile.TemporaryDirectory() as tmpdir:
         tmppath = Path(tmpdir)
         for addon_name in test_addons:
@@ -49,6 +54,8 @@ def make_addons_dir(test_addons):
             manifest = ast.literal_eval(manifest_path.read_text())
             manifest["version"] = os.environ["ODOO_VERSION"] + "." + manifest["version"]
             manifest_path.write_text(repr(manifest))
+            if odoo_version_info < (10, 0):
+                manifest_path.rename(manifest_path.parent / "__openerp__.py")
         yield tmppath
 
 
@@ -59,3 +66,15 @@ def install_test_addons(test_addons):
     ) as addons_dir:
         subprocess.check_call(["oca_install_addons"], cwd=addons_dir)
         yield addons_dir
+
+
+def dropdb():
+    subprocess.check_call(["dropdb", "--if-exists", os.environ["PGDATABASE"]])
+
+
+def did_run_test_module(output, test_module):
+    """Check that a test did run by looking in the Odoo log.
+    
+    test_module is the full name of the test (addon_name.tests.test_module).
+    """
+    return "odoo.addons." + test_module in output

@@ -79,6 +79,15 @@ jobs:
             odoo_version: "14.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.8-ocb14.0
+    services:
+      postgres:
+        image: postgres:9.6
+        env:
+          POSTGRES_USER: odoo
+          POSTGRES_PASSWORD: odoo
+          POSTGRES_DB: odoo
+        ports:
+          - 5432:5432
     steps:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -105,7 +114,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Tests
-        run: docker run -v ${PWD}/tests:/mnt/tests ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest /mnt/tests/runtests.sh -v
+        run: docker run -v ${PWD}/tests:/mnt/tests --network=host -e PGHOST=localhost ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest /mnt/tests/runtests.sh -v
+        # Don't bother with Odoo 8 and 9 for now...
+        if: ${{ matrix.odoo_version != '8.0' && matrix.odoo_version != '9.0' }}
       - name: Push image
         uses: docker/build-push-action@v2
         with:

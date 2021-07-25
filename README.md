@@ -15,6 +15,10 @@ These images provide the following guarantees:
 - The Odoo configuration file exists at `$ODOO_RC`.
 - The `python`, `pip` and `odoo` (`openerp-server` for Odoo < 10) commands
   found first in `PATH` are from that virtualenv.
+- `coverage` is installed in that virtualenv.
+- Prerequisites for running Odoo tests are installed in that virtualenv
+  (this notably includes `websocket-client` and the chrome browser for running
+  browser tests).
 
 Environment variables:
 

@@ -36,6 +36,12 @@ RUN curl -sSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
     && apt-get update -qq \
     && DEBIAN_FRONTEND=noninteractive apt-get install -qq postgresql-client-12
 
+# Install Google Chrome for browser tests
+ARG chrome_version=90.0.4430.93-1
+RUN curl -sSL https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${chrome_version}_amd64.deb -o /tmp/chrome.deb \
+    && apt-get -y install --no-install-recommends /tmp/chrome.deb \
+    && rm /tmp/chrome.deb
+
 RUN add-apt-repository -y ppa:deadsnakes/ppa
 
 ARG python_version
@@ -97,8 +103,14 @@ ARG odoo_version
 ADD https://raw.githubusercontent.com/OCA/OCB/$odoo_version/requirements.txt /tmp/ocb-requirements.txt
 RUN pip install --no-cache-dir --no-binary psycopg2 -r /tmp/ocb-requirements.txt
 
-# Install other test requirements
-RUN pip install --no-cache-dir coverage "odoo-autodiscover>=2 ; python_version<'3'"
+# Install other test requirements.
+# - coverage
+# - websocket-client is required for Odoo browser tests
+# - odoo-autodiscover required for python2
+RUN pip install --no-cache-dir \
+  coverage \
+  websocket-client \
+  "odoo-autodiscover>=2 ; python_version<'3'"
 
 # Install Odoo (use ADD for correct layer caching)
 ARG odoo_org_repo=odoo/odoo

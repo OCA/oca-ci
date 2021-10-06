@@ -90,7 +90,9 @@ RUN pipx install --pip-args="--no-cache-dir" "setuptools-odoo>=3.0.1"
 
 # Make a virtualenv for Odoo so we isolate from system python dependencies and
 # make sure addons we test declare all their python dependencies properly
+ARG setuptools_constraint
 RUN virtualenv -p python$python_version /opt/odoo-venv \
+    && /opt/odoo-venv/bin/pip install setuptools$setuptools_constraint \
     && /opt/odoo-venv/bin/pip list
 ENV PATH=/opt/odoo-venv/bin:$PATH
 

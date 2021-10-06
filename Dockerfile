@@ -78,7 +78,7 @@ RUN python3 -m venv /opt/pipx-venv \
 RUN pipx install --pip-args="--no-cache-dir" virtualenv
 
 # We use manifestoo to check licenses, development status
-RUN pipx install --pip-args="--no-cache-dir" manifestoo
+RUN pipx install --pip-args="--no-cache-dir" manifestoo>=0.3
 
 # Install the 'addons' helper script
 # TODO: use manifestoo
@@ -86,7 +86,7 @@ RUN pipx install --pip-args="--no-cache-dir" acsoo==3.0.2
 COPY bin/addons /usr/local/bin
 
 # Install setuptools-odoo-get-requirements helper script
-RUN pipx install --pip-args="--no-cache-dir" "setuptools-odoo>=2.7.1"
+RUN pipx install --pip-args="--no-cache-dir" "setuptools-odoo>=3.0.1"
 
 # Make a virtualenv for Odoo so we isolate from system python dependencies and
 # make sure addons we test declare all their python dependencies properly

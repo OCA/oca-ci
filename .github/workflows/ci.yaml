@@ -15,6 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # odoo/odoo
           - python_version: "2.7"
             odoo_version: "8.0"
             odoo_org_repo: "odoo/odoo"
@@ -53,10 +54,15 @@ jobs:
             odoo_version: "15.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.6-odoo15.0
+          - python_version: "3.8"
+            odoo_version: "15.0"
+            odoo_org_repo: "odoo/odoo"
+            image_name: py3.8-odoo15.0
           - python_version: "3.9"
             odoo_version: "15.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.9-odoo15.0
+          # oca/ocb
           - python_version: "2.7"
             odoo_version: "8.0"
             odoo_org_repo: "oca/ocb"
@@ -95,6 +101,10 @@ jobs:
             odoo_version: "15.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.6-ocb15.0
+          - python_version: "3.8"
+            odoo_version: "15.0"
+            odoo_org_repo: "oca/ocb"
+            image_name: py3.8-ocb15.0
           - python_version: "3.9"
             odoo_version: "15.0"
             odoo_org_repo: "oca/ocb"

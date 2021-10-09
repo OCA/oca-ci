@@ -1,0 +1,4 @@
+#!/bin/bash
+set -ex
+oca_export_and_commit_pot
+oca_git_push_if_remote_did_not_change $1

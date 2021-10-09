@@ -50,6 +50,9 @@ Available commands:
 - `oca_export_and_commit_pot`: export `.pot` files for all addons in
   `$ADDONS_DIR` that are installed in `$PGDATABASE`; git commit changes if any,
   using `$OCA_GIT_USER_NAME` and `$OCA_GIT_USER_EMAIL`.
+- `oca_git_push_if_remote_did_not_change`: push local commits unless the remote
+  tracked branch has evolved.
+- `oca_export_and_push_pot` combines the two previous commands.
 
 ## Build
 

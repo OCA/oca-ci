@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -eux
+
+PUSH_REPOSITORY=$1
+
+git remote -v
+git fetch --unshallow origin
+
+LOCAL=$(git rev-parse @)
+REMOTE=$(git rev-parse @{u})
+BASE=$(git merge-base @ @{u})
+
+if [ $LOCAL = $REMOTE ]; then
+    echo "No local change to push."
+elif [ $REMOTE = $BASE ]; then
+    echo "Pushing changes..."
+    git push $PUSH_REPOSITORY
+else
+    echo "Remote has evolved since we cloned, not pushing."
+fi

@@ -50,10 +50,10 @@ jobs:
             odoo_version: "14.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.8-odoo14.0
-          - python_version: "3.6"
+          - python_version: "3.7"
             odoo_version: "15.0"
             odoo_org_repo: "odoo/odoo"
-            image_name: py3.6-odoo15.0
+            image_name: py3.7-odoo15.0
           - python_version: "3.8"
             odoo_version: "15.0"
             odoo_org_repo: "odoo/odoo"
@@ -97,10 +97,10 @@ jobs:
             odoo_version: "14.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.8-ocb14.0
-          - python_version: "3.6"
+          - python_version: "3.7"
             odoo_version: "15.0"
             odoo_org_repo: "oca/ocb"
-            image_name: py3.6-ocb15.0
+            image_name: py3.7-ocb15.0
           - python_version: "3.8"
             odoo_version: "15.0"
             odoo_org_repo: "oca/ocb"

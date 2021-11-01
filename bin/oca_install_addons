@@ -1,25 +1,28 @@
 #!/bin/bash
 
 #
-# Install dependencies of addons to test, and add addons to test to Odoo's addons_path.
-#
-# An alternative technique would be to install all addons with `pip install --editable`
-# but it is relatively slow in repos with a large number of addons.
+# Install addons to test (in editable mode) and their dependencies.
 #
 
 set -ex
 
-# Compute and install direct dependencies of installable addons in $ADDONS_DIR
-# (this includes addons, python external dependencies and odoo itself)
-setuptools-odoo-get-requirements --include-addons --addons-dir ${ADDONS_DIR} >> test-requirements.txt
+# Pre-install setuptools-odoo as an optimization. Without this,
+# setuptools-odoo will be installed repeatedly for each addon in the repo
+# which significantly slows down installation in repos with many addons.
+pip install "setuptools-odoo>=2.7"
+# Disable the post versioning strategy as we don't need the exact versions
+# and this also speeds-up installation a little bit.
+export SETUPTOOLS_ODOO_POST_VERSION_STRATEGY_OVERRIDE=none
+
+# Install addons in current repo in editable mode, so coverage will see them.
+touch test-requirements.txt
+for addon in $(addons --addons-dir "${ADDONS_DIR}" --include "${INCLUDE}" --exclude "${EXCLUDE}" --separator " " list) ; do
+    echo "-e ./setup/${addon}" >> test-requirements.txt
+done
 cat test-requirements.txt
 pip install -r test-requirements.txt
 pip config list
 pip list
-
-# Add ADDONS_DIR to addons_path.
-echo "addons_path=/opt/odoo/addons,${ADDONS_DIR}" >> ${ODOO_RC}
-cat ${ODOO_RC}
 
 # Install 'deb' external dependencies of all Odoo addons found in path.
 DEBIAN_FRONTEND=noninteractive apt-get install -qq --no-install-recommends $(oca_list_external_dependencies deb)

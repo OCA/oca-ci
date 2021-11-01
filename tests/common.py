@@ -64,6 +64,16 @@ def install_test_addons(test_addons):
     with preserve_odoo_rc(), preserve_odoo_venv(), make_addons_dir(
         test_addons
     ) as addons_dir:
+        subprocess.check_call(
+            [
+                "setuptools-odoo-make-default",
+                "-d",
+                ".",
+                "--odoo-version-override",
+                os.environ["ODOO_VERSION"],
+            ],
+            cwd=addons_dir,
+        )
         subprocess.check_call(["oca_install_addons"], cwd=addons_dir)
         yield addons_dir
 
@@ -74,7 +84,7 @@ def dropdb():
 
 def did_run_test_module(output, test_module):
     """Check that a test did run by looking in the Odoo log.
-    
+
     test_module is the full name of the test (addon_name.tests.test_module).
     """
     return "odoo.addons." + test_module in output

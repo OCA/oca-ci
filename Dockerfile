@@ -85,7 +85,8 @@ RUN pipx install --pip-args="--no-cache-dir" manifestoo>=0.3
 RUN pipx install --pip-args="--no-cache-dir" acsoo==3.0.2
 COPY bin/addons /usr/local/bin
 
-# Install setuptools-odoo-get-requirements helper script
+# Install setuptools-odoo-get-requirements and setuptools-odoo-makedefault helper
+# scripts.
 RUN pipx install --pip-args="--no-cache-dir" "setuptools-odoo>=3.0.1"
 
 # Make a virtualenv for Odoo so we isolate from system python dependencies and

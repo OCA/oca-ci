@@ -78,7 +78,7 @@ RUN python3 -m venv /opt/pipx-venv \
 RUN pipx install --pip-args="--no-cache-dir" virtualenv
 
 # We use manifestoo to check licenses, development status
-RUN pipx install --pip-args="--no-cache-dir" manifestoo>=0.3
+RUN pipx install --pip-args="--no-cache-dir" manifestoo>=0.3.1
 
 # Install the 'addons' helper script
 # TODO: use manifestoo

@@ -93,7 +93,7 @@ RUN pipx install --pip-args="--no-cache-dir" "setuptools-odoo>=3.0.1"
 # make sure addons we test declare all their python dependencies properly
 ARG setuptools_constraint
 RUN virtualenv -p python$python_version /opt/odoo-venv \
-    && /opt/odoo-venv/bin/pip install "setuptools$setuptools_constraint" "pip>=21.3.1" \
+    && /opt/odoo-venv/bin/pip install "setuptools$setuptools_constraint" "pip>=21.3.1;python_version>='3.6'" \
     && /opt/odoo-venv/bin/pip list
 ENV PATH=/opt/odoo-venv/bin:$PATH
 

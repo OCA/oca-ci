@@ -23,12 +23,13 @@ RUN curl -sSL https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.
     && DEBIAN_FRONTEND=noninteractive apt-get install -qq -f --no-install-recommends \
     && rm /tmp/wkhtml.deb
 
-# Install nodejs
+# Install nodejs dependencies
 RUN curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
     && echo "deb https://deb.nodesource.com/node_15.x `lsb_release -c -s` main" > /etc/apt/sources.list.d/nodesource.list \
     && apt-get update -qq \
     && DEBIAN_FRONTEND=noninteractive apt-get install -qq nodejs
-RUN npm install -g rtlcss less
+# less is for odoo<12
+RUN npm install -g rtlcss less@3.0.4 less-plugin-clean-css
 
 # Install postgresql client
 RUN curl -sSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \

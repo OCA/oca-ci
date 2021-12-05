@@ -47,7 +47,7 @@ RUN add-apt-repository -y ppa:deadsnakes/ppa
 
 ARG python_version
 
-# Install build dependencies for common Odoo requirements
+# Install build dependencies for python libs commonly used by Odoo and OCA
 RUN apt-get update -qq \
     && DEBIAN_FRONTEND=noninteractive apt-get install -qq --no-install-recommends \
        build-essential \
@@ -61,11 +61,16 @@ RUN apt-get update -qq \
        libxml2-dev \
        libxslt1-dev \
        libz-dev \
+       libxmlsec1-dev \
        # for python-ldap
        libldap2-dev \
        libsasl2-dev \
        # need libjpeg to build older pillow versions
-       libjpeg-dev
+       libjpeg-dev \
+       # for pycups
+       libcups2-dev \
+       # some libs need swig
+       swig
 
 # Install pipx, which we use to install other python tools.
 ENV PIPX_BIN_DIR=/usr/local/bin

@@ -69,8 +69,9 @@ RUN apt-get update -qq \
        libjpeg-dev \
        # for pycups
        libcups2-dev \
-       # some libs need swig
-       swig
+       # some other build tools
+       swig \
+       pkg-config
 
 # Install pipx, which we use to install other python tools.
 ENV PIPX_BIN_DIR=/usr/local/bin

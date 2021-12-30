@@ -17,10 +17,19 @@ export SETUPTOOLS_ODOO_POST_VERSION_STRATEGY_OVERRIDE=none
 # Generate setup directories, in case they are not in the repo yet.
 setuptools-odoo-make-default -d ${ADDONS_DIR}
 
+# We need to help older pip versions running on python 2 and 3.5 (i.e. for Odoo <= 11),
+# by giving it the package name via the #egg fragment in pip install -e. Where we can
+# use the latest pip, `pip install -e setup/${addon}` works fine.
+DIST_PREFIX_VERSION=$(echo $ODOO_VERSION | cut -d '.' -f 1)
+if [[ $DIST_PREFIX_VERSION -ge 15 ]]
+then
+    DIST_PREFIX_VERSION=""
+fi
+
 # Install addons in current repo in editable mode, so coverage will see them.
 touch test-requirements.txt
 for addon in $(addons --addons-dir "${ADDONS_DIR}" --include "${INCLUDE}" --exclude "${EXCLUDE}" --separator " " list) ; do
-    echo "-e ./setup/${addon}" >> test-requirements.txt
+    echo "-e file://$(realpath ${ADDONS_DIR})/setup/${addon}#egg=odoo${DIST_PREFIX_VERSION}-addon-${addon}" >> test-requirements.txt
 done
 cat test-requirements.txt
 pip install -r test-requirements.txt

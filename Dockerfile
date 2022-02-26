@@ -94,7 +94,7 @@ COPY bin/addons /usr/local/bin
 
 # Install setuptools-odoo-get-requirements and setuptools-odoo-makedefault helper
 # scripts.
-RUN pipx install --pip-args="--no-cache-dir" "setuptools-odoo>=3.0.1"
+RUN pipx install --pip-args="--no-cache-dir" "setuptools-odoo>=3.0.7"
 
 # Make a virtualenv for Odoo so we isolate from system python dependencies and
 # make sure addons we test declare all their python dependencies properly
@@ -152,6 +152,7 @@ ENV PIP_NO_PYTHON_VERSION_WARNING=1
 # Control addons discovery. INCLUDE and EXCLUDE are comma-separated list of
 # addons to include (default: all) and exclude (default: none)
 ENV ADDONS_DIR=.
+ENV ADDONS_PATH=/opt/odoo/addons,${ADDONS_DIR}
 ENV INCLUDE=
 ENV EXCLUDE=
 ENV OCA_GIT_USER_NAME=oca-ci

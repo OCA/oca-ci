@@ -33,7 +33,7 @@ Environment variables:
 - `PIP_DISABLE_PIP_VERSION_CHECK=1`
 - `PIP_NO_PYTHON_VERSION_WARNING=1`
 - `ADDONS_DIR=.`
-- `ADDONS_PATH=/opt/odoo/addons,${ADDONS_DIR}`
+- `ADDONS_PATH=/opt/odoo/addons`
 - `INCLUDE=`
 - `EXCLUDE=`
 - `OCA_GIT_USER_NAME=oca-ci`: git user name to commit `.pot` files
@@ -44,7 +44,7 @@ Available commands:
 
 - `oca_install_addons`: make addons to test (found in `$ADDONS_DIR`, modulo
   `$INCLUDE` an `$EXCLUDE`) and their dependencies available in the Odoo addons
-  path. Append `addons_path=${ADDONS_PATH}` to `$ODOO_RC`. 
+  path. Append `addons_path=${ADDONS_PATH},${ADDONS_DIR}` to `$ODOO_RC`.
 - `oca_init_test_database`: create a test database named `$PGDATABASE` with
   direct dependencies of addons to test installed in it
 - `oca_run_tests`: run tests of addons on `$PGDATABASE`, with coverage.

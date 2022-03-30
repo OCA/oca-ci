@@ -69,6 +69,8 @@ RUN apt-get update -qq \
        libjpeg-dev \
        # for pycups
        libcups2-dev \
+       # for mysqlclient \
+       default-libmysqlclient-dev \
        # some other build tools
        swig \
        pkg-config

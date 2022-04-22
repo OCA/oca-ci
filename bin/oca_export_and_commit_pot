@@ -6,6 +6,9 @@
 
 set -ex
 
+# https://github.com/actions/checkout/issues/766
+git config --global --add safe.directory $PWD
+
 git config user.name ${OCA_GIT_USER_NAME}
 git config user.email ${OCA_GIT_USER_EMAIL}
 pip install click-odoo-contrib

@@ -52,6 +52,7 @@ RUN apt-get update -qq \
     && DEBIAN_FRONTEND=noninteractive apt-get install -qq --no-install-recommends \
        build-essential \
        python$python_version-dev \
+       python$python_version-venv \
        # we need python 3 for our helper scripts
        python3 \
        python3-venv \

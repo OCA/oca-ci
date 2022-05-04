@@ -73,7 +73,12 @@ RUN apt-get update -qq \
        default-libmysqlclient-dev \
        # some other build tools
        swig \
-       pkg-config
+       pkg-config \
+       # We should install distutils if and only if it exists
+    && apt-cache --generate pkgnames \
+       | grep --line-regexp --fixed-strings \
+          -e python$python_version-distutils \
+       | xargs apt install -y
 
 # Install pipx, which we use to install other python tools.
 ENV PIPX_BIN_DIR=/usr/local/bin

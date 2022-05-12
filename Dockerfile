@@ -73,6 +73,7 @@ RUN apt-get update -qq \
        default-libmysqlclient-dev \
        # some other build tools
        swig \
+       libffi-dev \
        pkg-config \
        # We should install distutils if and only if it exists
     && apt-cache --generate pkgnames \

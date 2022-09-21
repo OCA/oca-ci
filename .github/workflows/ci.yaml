@@ -58,6 +58,10 @@ jobs:
             odoo_version: "15.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.9-odoo15.0
+          - python_version: "3.10"
+            odoo_version: "16.0"
+            odoo_org_repo: "odoo/odoo"
+            image_name: py3.10-odoo16.0
           # oca/ocb
           - python_version: "2.7"
             odoo_version: "8.0"
@@ -101,6 +105,10 @@ jobs:
             odoo_version: "15.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.9-ocb15.0
+          - python_version: "3.10"
+            odoo_version: "16.0"
+            odoo_org_repo: "oca/ocb"
+            image_name: py3.10-ocb16.0
     services:
       postgres:
         image: postgres:9.6

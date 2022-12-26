@@ -38,8 +38,7 @@ RUN curl -sSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
     && DEBIAN_FRONTEND=noninteractive apt-get install -qq postgresql-client-12
 
 # Install Google Chrome for browser tests
-ARG chrome_version=90.0.4430.93-1
-RUN curl -sSL https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${chrome_version}_amd64.deb -o /tmp/chrome.deb \
+RUN curl -sSL https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o /tmp/chrome.deb \
     && apt-get -y install --no-install-recommends /tmp/chrome.deb \
     && rm /tmp/chrome.deb
 

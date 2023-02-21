@@ -92,13 +92,8 @@ RUN python3 -m venv /opt/pipx-venv \
 # in virtualenvs it create.
 RUN pipx install --pip-args="--no-cache-dir" virtualenv
 
-# We use manifestoo to check licenses, development status
+# We use manifestoo to check licenses, development status and list addons and dependencies
 RUN pipx install --pip-args="--no-cache-dir" "manifestoo>=0.3.1"
-
-# Install the 'addons' helper script
-# TODO: use manifestoo
-RUN pipx install --pip-args="--no-cache-dir" acsoo==3.0.2
-COPY bin/addons /usr/local/bin
 
 # Install setuptools-odoo-get-requirements and setuptools-odoo-makedefault helper
 # scripts.

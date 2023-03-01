@@ -9,7 +9,11 @@ set -ex
 
 oca_wait_for_postgres
 
-ADDONS=$(manifestoo --select-addons-dir ${ADDONS_DIR} --select-include "${INCLUDE}" --select-exclude "${EXCLUDE}" list-depends --separator=,)
+if [-z "${INCLUDE}"]; then
+    ADDONS=$(manifestoo --select-include "${INCLUDE}" --select-exclude "${EXCLUDE}" list-depends --separator=,)
+else
+    ADDONS=$(manifestoo --select-addons-dir ${ADDONS_DIR} --select-exclude "${EXCLUDE}" list-depends --separator=,)
+fi
 
 unbuffer $(which odoo || which openerp-server) \
   -d ${PGDATABASE} \

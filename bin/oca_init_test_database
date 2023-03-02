@@ -9,7 +9,7 @@ set -ex
 
 oca_wait_for_postgres
 
-if [-z "${INCLUDE}"]; then
+if [ -n "${INCLUDE}" ]; then
     ADDONS=$(manifestoo --select-include "${INCLUDE}" --select-exclude "${EXCLUDE}" list-depends --separator=,)
 else
     ADDONS=$(manifestoo --select-addons-dir ${ADDONS_DIR} --select-exclude "${EXCLUDE}" list-depends --separator=,)

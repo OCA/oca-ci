@@ -36,11 +36,10 @@ jobs:
             odoo_version: "11.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.5-odoo11.0
-          - python_version: "3.6"
+          - python_version: "3.5"
             odoo_version: "12.0"
             odoo_org_repo: "odoo/odoo"
-            setuptools_constraint: "<58"  # vatnumber needs setuptools with 2to3 support
-            image_name: py3.6-odoo12.0
+            image_name: py3.5-odoo12.0
           - python_version: "3.6"
             odoo_version: "13.0"
             odoo_org_repo: "odoo/odoo"
@@ -83,11 +82,10 @@ jobs:
             odoo_version: "11.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.5-ocb11.0
-          - python_version: "3.6"
+          - python_version: "3.5"
             odoo_version: "12.0"
             odoo_org_repo: "oca/ocb"
-            setuptools_constraint: "<58"  # vatnumber needs setuptools with 2to3 support
-            image_name: py3.6-ocb12.0
+            image_name: py3.5-ocb12.0
           - python_version: "3.6"
             odoo_version: "13.0"
             odoo_org_repo: "oca/ocb"

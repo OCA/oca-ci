@@ -135,7 +135,7 @@ RUN pip install --no-cache-dir -e /opt/odoo \
     && pip list
 
 # Make an empty odoo.cfg
-RUN echo "[options]" > /etc/odoo.cfg
+COPY etc/* /etc/
 ENV ODOO_RC=/etc/odoo.cfg
 ENV OPENERP_SERVER=/etc/odoo.cfg
 

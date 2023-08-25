@@ -23,32 +23,39 @@ jobs:
           - python_version: "2.7"
             odoo_version: "8.0"
             odoo_org_repo: "odoo/odoo"
+            virtualenv_constraint: "<20.22"
             image_name: py2.7-odoo8.0
           - python_version: "2.7"
             odoo_version: "9.0"
             odoo_org_repo: "odoo/odoo"
+            virtualenv_constraint: "<20.22"
             image_name: py2.7-odoo9.0
           - python_version: "2.7"
             odoo_version: "10.0"
             odoo_org_repo: "odoo/odoo"
+            virtualenv_constraint: "<20.22"
             image_name: py2.7-odoo10.0
           - python_version: "3.5"
             odoo_version: "11.0"
             odoo_org_repo: "odoo/odoo"
+            virtualenv_constraint: "<20.22"
             image_name: py3.5-odoo11.0
           - python_version: "3.6"
             odoo_version: "12.0"
             odoo_org_repo: "odoo/odoo"
             setuptools_constraint: "<58"  # vatnumber needs setuptools with 2to3 support
+            virtualenv_constraint: "<20.22"
             image_name: py3.6-odoo12.0
           - python_version: "3.6"
             odoo_version: "13.0"
             odoo_org_repo: "odoo/odoo"
             setuptools_constraint: "<58"  # vatnumber needs setuptools with 2to3 support
+            virtualenv_constraint: "<20.22"
             image_name: py3.6-odoo13.0
           - python_version: "3.6"
             odoo_version: "14.0"
             odoo_org_repo: "odoo/odoo"
+            virtualenv_constraint: "<20.22"
             image_name: py3.6-odoo14.0
           - python_version: "3.8"
             odoo_version: "14.0"
@@ -70,32 +77,39 @@ jobs:
           - python_version: "2.7"
             odoo_version: "8.0"
             odoo_org_repo: "oca/ocb"
+            virtualenv_constraint: "<20.22"
             image_name: py2.7-ocb8.0
           - python_version: "2.7"
             odoo_version: "9.0"
             odoo_org_repo: "oca/ocb"
+            virtualenv_constraint: "<20.22"
             image_name: py2.7-ocb9.0
           - python_version: "2.7"
             odoo_version: "10.0"
             odoo_org_repo: "oca/ocb"
+            virtualenv_constraint: "<20.22"
             image_name: py2.7-ocb10.0
           - python_version: "3.5"
             odoo_version: "11.0"
             odoo_org_repo: "oca/ocb"
+            virtualenv_constraint: "<20.22"
             image_name: py3.5-ocb11.0
           - python_version: "3.6"
             odoo_version: "12.0"
             odoo_org_repo: "oca/ocb"
             setuptools_constraint: "<58"  # vatnumber needs setuptools with 2to3 support
+            virtualenv_constraint: "<20.22"
             image_name: py3.6-ocb12.0
           - python_version: "3.6"
             odoo_version: "13.0"
             odoo_org_repo: "oca/ocb"
             setuptools_constraint: "<58"  # vatnumber needs setuptools with 2to3 support
+            virtualenv_constraint: "<20.22"
             image_name: py3.6-ocb13.0
           - python_version: "3.6"
             odoo_version: "14.0"
             odoo_org_repo: "oca/ocb"
+            virtualenv_constraint: "<20.22"
             image_name: py3.6-ocb14.0
           - python_version: "3.8"
             odoo_version: "14.0"
@@ -139,6 +153,7 @@ jobs:
             odoo_version=${{ matrix.odoo_version }}
             odoo_org_repo=${{ matrix.odoo_org_repo }}
             setuptools_constraint=${{ matrix.setuptools_constraint }}
+            virtualenv_constraint=${{ matrix.virtualenv_constraint }}
           tags: |
             ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
           labels: |

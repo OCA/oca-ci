@@ -175,6 +175,7 @@ jobs:
             odoo_version=${{ matrix.odoo_version }}
             odoo_org_repo=${{ matrix.odoo_org_repo }}
             setuptools_constraint=${{ matrix.setuptools_constraint }}
+            virtualenv_constraint=${{ matrix.virtualenv_constraint }}
           tags: |
             ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
           labels: |

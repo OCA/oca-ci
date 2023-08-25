@@ -148,15 +148,15 @@ jobs:
       - name: Build image
         uses: docker/build-push-action@v3
         with:
-          build-args: |
+          build-args: &build-args |
             python_version=${{ matrix.python_version }}
             odoo_version=${{ matrix.odoo_version }}
             odoo_org_repo=${{ matrix.odoo_org_repo }}
             setuptools_constraint=${{ matrix.setuptools_constraint }}
             virtualenv_constraint=${{ matrix.virtualenv_constraint }}
-          tags: |
+          tags: &tags |
             ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
-          labels: |
+          labels: &labels |
             org.opencontainers.image.source=${{ github.event.repository.html_url }}
           cache-from: type=registry,ref=ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
           cache-to: type=local,dest=/tmp/.buildx-cache
@@ -170,16 +170,9 @@ jobs:
       - name: Push image
         uses: docker/build-push-action@v3
         with:
-          build-args: |
-            python_version=${{ matrix.python_version }}
-            odoo_version=${{ matrix.odoo_version }}
-            odoo_org_repo=${{ matrix.odoo_org_repo }}
-            setuptools_constraint=${{ matrix.setuptools_constraint }}
-            virtualenv_constraint=${{ matrix.virtualenv_constraint }}
-          tags: |
-            ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
-          labels: |
-            org.opencontainers.image.source=${{ github.event.repository.html_url }}
+          build-args: *build-args
+          tags: *tags
+          labels: *labels
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=inline
           push: true

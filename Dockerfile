@@ -89,7 +89,8 @@ RUN python3 -m venv /opt/pipx-venv \
 
 # We don't use the ubuntu virtualenv package because it unbundles pip dependencies
 # in virtualenvs it create.
-RUN pipx install --pip-args="--no-cache-dir" virtualenv
+ARG virtualenv_constraint
+RUN pipx install --pip-args="--no-cache-dir" "virtualenv$virtualenv_constraint"
 
 # We use manifestoo to check licenses, development status and list addons and dependencies
 RUN pipx install --pip-args="--no-cache-dir" "manifestoo>=0.3.1"

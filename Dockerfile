@@ -95,9 +95,10 @@ RUN pipx install --pip-args="--no-cache-dir" "virtualenv$virtualenv_constraint"
 # We use manifestoo to check licenses, development status and list addons and dependencies
 RUN pipx install --pip-args="--no-cache-dir" "manifestoo>=0.3.1"
 
-# Install setuptools-odoo-get-requirements and setuptools-odoo-makedefault helper
-# scripts.
-RUN pipx install --pip-args="--no-cache-dir" "setuptools-odoo>=3.0.7"
+# Install pyproject-dependencies helper scripts.
+ARG build_deps="setuptools-odoo wheel whool"
+RUN pipx install --pip-args="--no-cache-dir" pyproject-dependencies
+RUN pipx inject --pip-args="--no-cache-dir" pyproject-dependencies $build_deps
 
 # Make a virtualenv for Odoo so we isolate from system python dependencies and
 # make sure addons we test declare all their python dependencies properly

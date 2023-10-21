@@ -8,6 +8,14 @@ import pytest
 def repo_dir(tmp_path_factory) -> str:
     repo_path = tmp_path_factory.mktemp("repo")
     subprocess.check_call(["git", "init"], cwd=repo_path)
+    subprocess.check_call(
+        ["git", "config", "user.email", "test@example.com"],
+        cwd=repo_path,
+    )
+    subprocess.check_call(
+        ["git", "config", "user.name", "test"],
+        cwd=repo_path,
+    )
     (repo_path / "README").touch()
     subprocess.check_call(["git", "add", "."], cwd=repo_path)
     subprocess.check_call(["git", "commit", "-m", "initial commit"], cwd=repo_path)
@@ -23,6 +31,14 @@ def git_clone_path(repo_dir: str, tmp_path) -> Path:
     clone_path = tmp_path / "clone"
     subprocess.check_call(
         ["git", "clone", "--depth=1", "file://" + repo_dir, str(clone_path)]
+    )
+    subprocess.check_call(
+        ["git", "config", "user.email", "test@example.com"],
+        cwd=clone_path,
+    )
+    subprocess.check_call(
+        ["git", "config", "user.name", "test"],
+        cwd=clone_path,
     )
     return clone_path
 

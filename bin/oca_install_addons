@@ -5,14 +5,26 @@
 #
 # An alternative technique would be to install all addons with `pip install --editable`
 # but it is relatively slow in repos with a large number of addons. This is an area
-# where pip and/or setuptools could improve.
+# where pip could improve.
 #
 
 set -ex
+shopt -s nullglob  # in case there is setup.py nor pyproject.toml
 
 # Compute and install direct dependencies of installable addons in $ADDONS_DIR
-# (this includes addons, python external dependencies and odoo itself)
-setuptools-odoo-get-requirements --include-addons --addons-dir ${ADDONS_DIR} >> test-requirements.txt
+# (this includes addons, python external dependencies and odoo itself).
+# The environment variables are for better perfomance as we are interested in
+# the dependencies metadata only, and not the exact versions.
+# --no-isolation is for performance. The Dockerfile has setuptools-odoo and whool
+# preinstalled in the same environment as pyproject-dependencies.
+# --ignore-build-errors is needed to avoid errors with uninstallable addons.
+env SETUPTOOLS_ODOO_POST_VERSION_STRATEGY_OVERRIDE=none \
+    WHOOL_POST_VERSION_STRATEGY_OVERRIDE=none \
+    pyproject-dependencies \
+      --no-isolation \
+      --ignore-build-errors \
+      ${ADDONS_DIR}/*/pyproject.toml ${ADDONS_DIR}/setup/*/setup.py \
+      >> test-requirements.txt
 
 # Install addons in current repo in editable mode, so coverage will see them.
 cat test-requirements.txt

@@ -4,6 +4,7 @@ import os
 import shutil
 import subprocess
 import tempfile
+import textwrap
 from pathlib import Path
 
 ODOO_VENV = "/opt/odoo-venv"
@@ -44,6 +45,7 @@ def make_addons_dir(test_addons):
 
     Adjust the addons version to match the Odoo version being tested.
     Rename __manifest__.py to __openerp__.py for older Odoo versions.
+    Add pyproject.toml.
     """
     with tempfile.TemporaryDirectory() as tmpdir:
         tmppath = Path(tmpdir)
@@ -56,6 +58,16 @@ def make_addons_dir(test_addons):
             manifest_path.write_text(repr(manifest))
             if odoo_version_info < (10, 0):
                 manifest_path.rename(manifest_path.parent / "__openerp__.py")
+            pyproject_toml_path = tmppath / addon_name / "pyproject.toml"
+            pyproject_toml_path.write_text(
+                textwrap.dedent(
+                    """\
+                    [build-system]
+                    requires = ["whool"]
+                    build-backend = "whool.buildapi"
+                    """
+                )
+            )
         yield tmppath
 
 
@@ -64,16 +76,6 @@ def install_test_addons(test_addons):
     with preserve_odoo_rc(), preserve_odoo_venv(), make_addons_dir(
         test_addons
     ) as addons_dir:
-        subprocess.check_call(
-            [
-                "setuptools-odoo-make-default",
-                "-d",
-                ".",
-                "--odoo-version-override",
-                os.environ["ODOO_VERSION"],
-            ],
-            cwd=addons_dir,
-        )
         subprocess.check_call(["oca_install_addons"], cwd=addons_dir)
         yield addons_dir
 

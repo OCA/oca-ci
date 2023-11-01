@@ -61,7 +61,8 @@ ARG python_version
 RUN apt-get update -qq \
     && DEBIAN_FRONTEND=noninteractive apt-get install -qq --no-install-recommends \
        build-essential \
-       python$python_version-dev \
+       python${python_version}-dev \
+       python${python_version}-venv \
        # we need python 3 for our helper scripts
        python3 \
        python3-venv \
@@ -91,11 +92,6 @@ RUN apt-get update -qq \
           -e python$python_version-distutils \
        | xargs apt install -y
 
-# We don't use the ubuntu virtualenv package because it unbundles pip dependencies
-# in virtualenvs it create.
-ARG virtualenv_constraint
-RUN pipx install --pip-args="--no-cache-dir" "virtualenv$virtualenv_constraint"
-
 # We use manifestoo to check licenses, development status and list addons and dependencies
 RUN pipx install --pip-args="--no-cache-dir" "manifestoo>=0.3.1"
 
@@ -107,7 +103,7 @@ RUN pipx inject --pip-args="--no-cache-dir" pyproject-dependencies $build_deps
 # Make a virtualenv for Odoo so we isolate from system python dependencies and
 # make sure addons we test declare all their python dependencies properly
 ARG setuptools_constraint
-RUN virtualenv -p python$python_version /opt/odoo-venv \
+RUN python$python_version -m venv /opt/odoo-venv \
     && /opt/odoo-venv/bin/pip install "setuptools$setuptools_constraint" "pip>=21.3.1;python_version>='3.6'" \
     && /opt/odoo-venv/bin/pip list
 ENV PATH=/opt/odoo-venv/bin:$PATH

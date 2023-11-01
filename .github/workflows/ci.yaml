@@ -20,24 +20,6 @@ jobs:
       matrix:
         include:
           # odoo/odoo
-          - python_version: "2.7"
-            codename: focal
-            odoo_version: "8.0"
-            odoo_org_repo: "odoo/odoo"
-            virtualenv_constraint: "<20.22"
-            image_name: py2.7-odoo8.0
-          - python_version: "2.7"
-            codename: focal
-            odoo_version: "9.0"
-            odoo_org_repo: "odoo/odoo"
-            virtualenv_constraint: "<20.22"
-            image_name: py2.7-odoo9.0
-          - python_version: "2.7"
-            codename: focal
-            odoo_version: "10.0"
-            odoo_org_repo: "odoo/odoo"
-            virtualenv_constraint: "<20.22"
-            image_name: py2.7-odoo10.0
           - python_version: "3.5"
             codename: focal
             odoo_version: "11.0"
@@ -90,24 +72,6 @@ jobs:
             odoo_org_repo: "odoo/odoo"
             image_name: py3.10-odoo17.0
           # oca/ocb
-          - python_version: "2.7"
-            codename: focal
-            odoo_version: "8.0"
-            odoo_org_repo: "oca/ocb"
-            virtualenv_constraint: "<20.22"
-            image_name: py2.7-ocb8.0
-          - python_version: "2.7"
-            codename: focal
-            odoo_version: "9.0"
-            odoo_org_repo: "oca/ocb"
-            virtualenv_constraint: "<20.22"
-            image_name: py2.7-ocb9.0
-          - python_version: "2.7"
-            codename: focal
-            odoo_version: "10.0"
-            odoo_org_repo: "oca/ocb"
-            virtualenv_constraint: "<20.22"
-            image_name: py2.7-ocb10.0
           - python_version: "3.5"
             codename: focal
             odoo_version: "11.0"

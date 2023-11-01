@@ -21,109 +21,131 @@ jobs:
         include:
           # odoo/odoo
           - python_version: "2.7"
+            codename: focal
             odoo_version: "8.0"
             odoo_org_repo: "odoo/odoo"
             virtualenv_constraint: "<20.22"
             image_name: py2.7-odoo8.0
           - python_version: "2.7"
+            codename: focal
             odoo_version: "9.0"
             odoo_org_repo: "odoo/odoo"
             virtualenv_constraint: "<20.22"
             image_name: py2.7-odoo9.0
           - python_version: "2.7"
+            codename: focal
             odoo_version: "10.0"
             odoo_org_repo: "odoo/odoo"
             virtualenv_constraint: "<20.22"
             image_name: py2.7-odoo10.0
           - python_version: "3.5"
+            codename: focal
             odoo_version: "11.0"
             odoo_org_repo: "odoo/odoo"
             virtualenv_constraint: "<20.22"
             image_name: py3.5-odoo11.0
           - python_version: "3.6"
+            codename: focal
             odoo_version: "12.0"
             odoo_org_repo: "odoo/odoo"
             setuptools_constraint: "<58"  # vatnumber needs setuptools with 2to3 support
             virtualenv_constraint: "<20.22"
             image_name: py3.6-odoo12.0
           - python_version: "3.6"
+            codename: focal
             odoo_version: "13.0"
             odoo_org_repo: "odoo/odoo"
             setuptools_constraint: "<58"  # vatnumber needs setuptools with 2to3 support
             virtualenv_constraint: "<20.22"
             image_name: py3.6-odoo13.0
           - python_version: "3.6"
+            codename: focal
             odoo_version: "14.0"
             odoo_org_repo: "odoo/odoo"
             virtualenv_constraint: "<20.22"
             image_name: py3.6-odoo14.0
           - python_version: "3.8"
+            codename: focal
             odoo_version: "14.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.8-odoo14.0
           - python_version: "3.8"
+            codename: focal
             odoo_version: "15.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.8-odoo15.0
           - python_version: "3.9"
+            codename: focal
             odoo_version: "15.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.9-odoo15.0
           - python_version: "3.10"
+            codename: jammy
             odoo_version: "16.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.10-odoo16.0
           # oca/ocb
           - python_version: "2.7"
+            codename: focal
             odoo_version: "8.0"
             odoo_org_repo: "oca/ocb"
             virtualenv_constraint: "<20.22"
             image_name: py2.7-ocb8.0
           - python_version: "2.7"
+            codename: focal
             odoo_version: "9.0"
             odoo_org_repo: "oca/ocb"
             virtualenv_constraint: "<20.22"
             image_name: py2.7-ocb9.0
           - python_version: "2.7"
+            codename: focal
             odoo_version: "10.0"
             odoo_org_repo: "oca/ocb"
             virtualenv_constraint: "<20.22"
             image_name: py2.7-ocb10.0
           - python_version: "3.5"
+            codename: focal
             odoo_version: "11.0"
             odoo_org_repo: "oca/ocb"
             virtualenv_constraint: "<20.22"
             image_name: py3.5-ocb11.0
           - python_version: "3.6"
+            codename: focal
             odoo_version: "12.0"
             odoo_org_repo: "oca/ocb"
             setuptools_constraint: "<58"  # vatnumber needs setuptools with 2to3 support
             virtualenv_constraint: "<20.22"
             image_name: py3.6-ocb12.0
           - python_version: "3.6"
+            codename: focal
             odoo_version: "13.0"
             odoo_org_repo: "oca/ocb"
             setuptools_constraint: "<58"  # vatnumber needs setuptools with 2to3 support
             virtualenv_constraint: "<20.22"
             image_name: py3.6-ocb13.0
           - python_version: "3.6"
+            codename: focal
             odoo_version: "14.0"
             odoo_org_repo: "oca/ocb"
             virtualenv_constraint: "<20.22"
             image_name: py3.6-ocb14.0
           - python_version: "3.8"
+            codename: focal
             odoo_version: "14.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.8-ocb14.0
           - python_version: "3.8"
+            codename: focal
             odoo_version: "15.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.8-ocb15.0
           - python_version: "3.9"
+            codename: focal
             odoo_version: "15.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.9-ocb15.0
           - python_version: "3.10"
+            codename: jammy
             odoo_version: "16.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.10-ocb16.0
@@ -149,6 +171,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           build-args: |
+            codename=${{ matrix.codename }}
             python_version=${{ matrix.python_version }}
             odoo_version=${{ matrix.odoo_version }}
             odoo_org_repo=${{ matrix.odoo_org_repo }}
@@ -171,6 +194,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           build-args: |
+            codename=${{ matrix.codename }}
             python_version=${{ matrix.python_version }}
             odoo_version=${{ matrix.odoo_version }}
             odoo_org_repo=${{ matrix.odoo_org_repo }}

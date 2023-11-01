@@ -85,12 +85,7 @@ RUN apt-get update -qq \
        # some other build tools
        swig \
        libffi-dev \
-       pkg-config \
-       # We should install distutils if and only if it exists
-    && apt-cache --generate pkgnames \
-       | grep --line-regexp --fixed-strings \
-          -e python$python_version-distutils \
-       | xargs apt install -y
+       pkg-config
 
 # We use manifestoo to check licenses, development status and list addons and dependencies
 RUN pipx install --pip-args="--no-cache-dir" "manifestoo>=0.3.1"

@@ -120,11 +120,9 @@ RUN pip install --no-cache-dir --no-binary psycopg2 -r /tmp/ocb-requirements.txt
 # Install other test requirements.
 # - coverage
 # - websocket-client is required for Odoo browser tests
-# - odoo-autodiscover required for python2
 RUN pip install --no-cache-dir \
   coverage \
-  websocket-client \
-  "odoo-autodiscover>=2 ; python_version<'3'"
+  websocket-client
 
 # Install Odoo (use ADD for correct layer caching)
 ARG odoo_org_repo=odoo/odoo

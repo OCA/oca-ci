@@ -15,7 +15,7 @@ else
     ADDONS=$(manifestoo --select-addons-dir ${ADDONS_DIR} --select-exclude "${EXCLUDE}" list-depends --separator=,)
 fi
 
-unbuffer $(which odoo || which openerp-server) \
+unbuffer $(which odoo) \
   -d ${PGDATABASE} \
   -i ${ADDONS:-base} \
   --stop-after-init

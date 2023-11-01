@@ -42,11 +42,5 @@ def test_openerp_server_rc():
     assert os.environ["OPENERP_SERVER"] == os.environ["ODOO_RC"]
 
 
-@pytest.mark.skipif(odoo_version_info >= (10, 0), reason="Odoo>=10")
-def test_import_openerp():
-    subprocess.check_call(["python", "-c", "import openerp; openerp.addons.__path__"])
-
-
-@pytest.mark.skipif(odoo_version_info < (10, 0), reason="Odoo<10")
 def test_import_odoo():
     subprocess.check_call(["python", "-c", "import odoo; odoo.addons.__path__"])

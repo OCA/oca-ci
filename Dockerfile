@@ -14,7 +14,10 @@ RUN apt-get update -qq \
         gnupg \
         lsb-release \
         software-properties-common \
-        expect-dev
+        expect-dev \
+        pipx
+
+ENV PIPX_BIN_DIR=/usr/local/bin
 
 # Install wkhtml
 RUN case $(lsb_release -c -s) in \
@@ -87,13 +90,6 @@ RUN apt-get update -qq \
        | grep --line-regexp --fixed-strings \
           -e python$python_version-distutils \
        | xargs apt install -y
-
-# Install pipx, which we use to install other python tools.
-ENV PIPX_BIN_DIR=/usr/local/bin
-ENV PIPX_DEFAULT_PYTHON=/usr/bin/python3
-RUN python3 -m venv /opt/pipx-venv \
-    && /opt/pipx-venv/bin/pip install --no-cache-dir pipx \
-    && ln -s /opt/pipx-venv/bin/pipx /usr/local/bin/
 
 # We don't use the ubuntu virtualenv package because it unbundles pip dependencies
 # in virtualenvs it create.

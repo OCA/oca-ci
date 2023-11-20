@@ -8,6 +8,11 @@ set -ex
 
 oca_wait_for_postgres
 
+if [ -n "${SERVER_WIDE_MODULES}"]; then
+    WIDE_MODULES=${SERVER_WIDE_MODULES}
+else
+    WIDE_MODULES="web,base"
+fi
 if [ -n "${INCLUDE}" ]; then
     ADDONS=$(manifestoo --select-include "${INCLUDE}" --select-exclude "${EXCLUDE}" list --separator=,)
 else
@@ -21,5 +26,6 @@ unbuffer coverage run --include "${ADDONS_DIR}/*" --branch \
     $(which odoo || which openerp-server) \
     -d ${PGDATABASE} \
     -i ${ADDONS} \
+    --load=${WIDE_MODULES}
     --test-enable \
     --stop-after-init

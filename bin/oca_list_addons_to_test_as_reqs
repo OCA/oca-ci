@@ -11,15 +11,24 @@ import subprocess
 from pathlib import Path
 
 
-def _make_addon_dist_name(name: str) -> str:
+def _make_addon_dist_name(name):
     odoo_series = int(os.getenv("ODOO_VERSION").partition(".")[0])
-    return f"odoo{odoo_series if odoo_series < 15 else ''}-addon-{name}"
+    return "odoo{odoo_series}-addon-{name}".format(
+        name=name,
+        odoo_series=odoo_series if odoo_series < 15 else "",
+    )
 
 
-def _make_addon_req(path: Path, editable: bool) -> str:
+def _make_addon_req(path, editable):
+    addon_uri = path.resolve().as_uri()
+    addon_dist_name = _make_addon_dist_name(path.name)
     if editable:
-        return f"-e {path.resolve().as_uri()}#egg={_make_addon_dist_name(path.name)}"
-    return f"{_make_addon_dist_name(path.name)} @ {path.resolve().as_uri()}"
+        return "-e {addon_uri}#egg={addon_dist_name}".format(
+            addon_uri=addon_uri, addon_dist_name=addon_dist_name
+        )
+    return "{addon_dist_name} @ {addon_uri}".format(
+        addon_dist_name=addon_dist_name, addon_uri=addon_uri
+    )
 
 
 def _list_addons_to_test():

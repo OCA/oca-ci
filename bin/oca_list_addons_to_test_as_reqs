@@ -1,0 +1,49 @@
+#!/usr/bin/env python
+
+#
+# Print addons to test as pip requirements pointing to local directories.
+# There is an option to make them editable or file URLs.
+#
+
+import argparse
+import os
+import subprocess
+from pathlib import Path
+
+
+def _make_addon_dist_name(name: str) -> str:
+    odoo_series = int(os.getenv("ODOO_VERSION").partition(".")[0])
+    return f"odoo{odoo_series if odoo_series < 15 else ''}-addon-{name}"
+
+
+def _make_addon_req(path: Path, editable: bool) -> str:
+    if editable:
+        return f"-e {path.resolve().as_uri()}#egg={_make_addon_dist_name(path.name)}"
+    return f"{_make_addon_dist_name(path.name)} @ {path.resolve().as_uri()}"
+
+
+def _list_addons_to_test():
+    return (
+        subprocess.check_output(["oca_list_addons_to_test"], universal_newlines=True)
+        .strip()
+        .split(",")
+    )
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "--editable",
+    action="store_true",
+    help="Path to addons dir",
+)
+args = parser.parse_args()
+
+addons_dir = Path(os.getenv("ADDONS_DIR", "."))
+for addon_name in _list_addons_to_test():
+    pyproject_path = addons_dir / addon_name / "pyproject.toml"
+    if pyproject_path.exists():
+        print(_make_addon_req(pyproject_path.parent, args.editable))
+    else:
+        setuppy_path = addons_dir / "setup" / addon_name / "setup.py"
+        if setuppy_path.exists():
+            print(_make_addon_req(setuppy_path.parent, args.editable))

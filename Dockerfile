@@ -97,7 +97,10 @@ RUN pipx inject --pip-args="--no-cache-dir" pyproject-dependencies $build_deps
 
 # Make a virtualenv for Odoo so we isolate from system python dependencies and
 # make sure addons we test declare all their python dependencies properly
-ARG setuptools_constraint
+# Use setuptools<64 because it is the last version that does not support PEP 660,
+# and setuptools's PEP 660 default implementation breaks compatibility with Odoo
+# when editable installs are done in standard-based mode by pip.
+ARG setuptools_constraint="<64"
 RUN python$python_version -m venv /opt/odoo-venv \
     && /opt/odoo-venv/bin/pip install -U "setuptools$setuptools_constraint" "pip" \
     && /opt/odoo-venv/bin/pip list

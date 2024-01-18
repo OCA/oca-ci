@@ -13,7 +13,7 @@ These images provide the following guarantees:
 - Odoo source code is in `/opt/odoo`.
 - Odoo is installed in editable mode in a virtualenv isolated from system python packages.
 - The Odoo configuration file exists at `$ODOO_RC`.
-- The `python`, `pip` and `odoo` (`openerp-server` for Odoo < 10) commands
+- The `python`, `pip` and `odoo` commands
   found first in `PATH` are from that virtualenv.
 - `coverage` is installed in that virtualenv.
 - Prerequisites for running Odoo tests are installed in that virtualenv

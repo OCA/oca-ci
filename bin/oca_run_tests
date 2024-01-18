@@ -18,7 +18,7 @@ if [ -z "$ADDONS" ]; then
 fi
 
 unbuffer coverage run --include "${ADDONS_DIR}/*" --branch \
-    $(which odoo || which openerp-server) \
+    $(which odoo) \
     -d ${PGDATABASE} \
     -i ${ADDONS} \
     --test-enable \

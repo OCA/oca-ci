@@ -8,6 +8,6 @@ set -e
 here=$(dirname $0)
 testvenv=/tmp/testvenv 
 
-virtualenv -p python3 $testvenv
+/usr/bin/python3 -m venv $testvenv
 $testvenv/bin/pip install pytest
 $testvenv/bin/pytest --color=yes --ignore $here/data $here "$@"

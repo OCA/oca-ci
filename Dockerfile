@@ -99,7 +99,7 @@ RUN pipx inject --pip-args="--no-cache-dir" pyproject-dependencies $build_deps
 # make sure addons we test declare all their python dependencies properly
 ARG setuptools_constraint
 RUN python$python_version -m venv /opt/odoo-venv \
-    && /opt/odoo-venv/bin/pip install -U "setuptools$setuptools_constraint" "pip" \
+    && /opt/odoo-venv/bin/pip install -U "setuptools$setuptools_constraint" "wheel" "pip" \
     && /opt/odoo-venv/bin/pip list
 ENV PATH=/opt/odoo-venv/bin:$PATH
 

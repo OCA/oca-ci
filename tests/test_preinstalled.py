@@ -7,7 +7,7 @@ import subprocess
 
 import pytest
 
-from .common import odoo_bin, odoo_version_info
+from .common import odoo_bin, odoo_version_info, make_addons_dir
 
 
 def test_odoo_bin_in_path():
@@ -44,3 +44,18 @@ def test_openerp_server_rc():
 
 def test_import_odoo():
     subprocess.check_call(["python", "-c", "import odoo; odoo.addons.__path__"])
+    subprocess.check_call(["python", "-c", "import odoo.cli"])
+
+
+def test_import_odoo_after_addon_install():
+    with make_addons_dir(["addon_success"]) as addons_dir:
+        addon_dir = addons_dir / "addon_success"
+        subprocess.check_call(["git", "init"], cwd=addon_dir)
+        subprocess.check_call(["git", "add", "."], cwd=addon_dir)
+        subprocess.check_call(["git", "config", "user.email", "..."], cwd=addon_dir)
+        subprocess.check_call(["git", "config", "user.name", "me@example.com"], cwd=addon_dir)
+        subprocess.check_call(["git", "commit", "-m", "..."], cwd=addon_dir)
+        subprocess.check_call(
+            ["python", "-m", "pip", "install", addons_dir / "addon_success"]
+        )
+    subprocess.check_call(["python", "-c", "import odoo.cli"])

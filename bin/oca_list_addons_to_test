@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#
+# Print addons to test, comma separated.
+# Take INCLUDE and EXCLUDE variables into account.
+# Do not list addons that are not installable.
+#
+
+set -ex
+
+if [ -n "${INCLUDE}" ]; then
+    ADDONS=$(manifestoo --select-include "${INCLUDE}" --select-exclude "${EXCLUDE}" list --separator=,)
+else
+    ADDONS=$(manifestoo --select-addons-dir ${ADDONS_DIR} --select-exclude "${EXCLUDE}" list --separator=,)
+fi
+
+echo $ADDONS

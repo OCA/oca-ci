@@ -25,12 +25,27 @@ env SETUPTOOLS_ODOO_POST_VERSION_STRATEGY_OVERRIDE=none \
       --ignore-build-errors \
       ${ADDONS_DIR}/*/pyproject.toml ${ADDONS_DIR}/setup/*/setup.py \
       >> test-requirements.txt
-
-# Install addons in current repo in editable mode, so coverage will see them.
 cat test-requirements.txt
-pip install -r test-requirements.txt
+
+# To be sure to install addons from this repo if they are dependencies of dependencies,
+# we create a constraints file with local directory references to the addons to test.
+if python -c 'import sys; sys.exit(sys.version_info < (3,6))' ; then
+    # python >= 3.6
+    oca_list_addons_to_test_as_reqs >> test-constraints.txt
+else
+    # old python where pip does not support URL constraints
+    touch test-constraints.txt
+fi
+cat test-constraints.txt
+
+# show pip config
 pip config list
-pip list
+
+# Install dependencies of addons to test.
+pip install -r test-requirements.txt -c test-constraints.txt
+
+# show what we have installed
+pip freeze
 
 # Add ADDONS_DIR to addons_path.
 echo "addons_path=${ADDONS_PATH},${ADDONS_DIR}" >> ${ODOO_RC}
@@ -42,4 +57,3 @@ if [ -n "$deps" ]; then
     # Install 'deb' external dependencies of all Odoo addons found in path.
     DEBIAN_FRONTEND=noninteractive apt-get install -qq --no-install-recommends ${deps}
 fi
-

@@ -38,22 +38,5 @@ else
 fi
 cat test-constraints.txt
 
-# show pip config
-pip config list
-
 # Install dependencies of addons to test.
 pip install -r test-requirements.txt -c test-constraints.txt
-
-# show what we have installed
-pip freeze
-
-# Add ADDONS_DIR to addons_path.
-echo "addons_path=${ADDONS_PATH},${ADDONS_DIR}" >> ${ODOO_RC}
-cat ${ODOO_RC}
-
-deps=$(oca_list_external_dependencies deb)
-if [ -n "$deps" ]; then
-    apt-get update -qq
-    # Install 'deb' external dependencies of all Odoo addons found in path.
-    DEBIAN_FRONTEND=noninteractive apt-get install -qq --no-install-recommends ${deps}
-fi

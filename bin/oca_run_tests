@@ -18,4 +18,5 @@ unbuffer coverage run --include "${ADDONS_DIR}/*" --branch \
     -d ${PGDATABASE} \
     -i ${ADDONS} \
     --test-enable \
+    --workers=${WORKERS:-0} \
     --stop-after-init

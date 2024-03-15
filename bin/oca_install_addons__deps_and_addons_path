@@ -9,7 +9,7 @@
 #
 
 set -ex
-shopt -s nullglob  # in case there is setup.py nor pyproject.toml
+shopt -s nullglob  # in case there is no setup.py nor pyproject.toml
 
 # Compute and install direct dependencies of installable addons in $ADDONS_DIR
 # (this includes addons, python external dependencies and odoo itself).

@@ -75,3 +75,7 @@ Tune it to your liking, then run:
 
 `docker compose run --build test ./runtests.sh -v`
 
+This docker-compose mounts this project, and `runtests.sh` adds then `bin` directory to
+the `PATH` for easier dev/test iteration.
+
+There is also a devcontainer configuration.

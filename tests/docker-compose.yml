@@ -1,0 +1,19 @@
+services:
+  test:
+    build:
+      context: ..
+      args:
+        codename: jammy
+        python_version: "3.10"
+        odoo_version: "16.0"
+    volumes:
+      - .:/mnt/tests
+    working_dir: /mnt/tests
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+      POSTGRES_DB: odoo

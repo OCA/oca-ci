@@ -68,8 +68,10 @@ Build args:
 
 Tests are written using [pytest](https://pytest.org) in the `tests` directory.
 
-You can run them using the `runtests.sh` script inside the container, like this:
+You can run them using the `runtests.sh` script inside the container.
 
-```console
-docker run -v $PWD/tests:/mnt/tests ghcr.io/oca/oca-ci/py3.8-odoo14.0:latest /mnt/tests/runtests.sh -v
-```
+In the test directory, there is a `docker-compose.yml` to help run the tests.
+Tune it to your liking, then run:
+
+`docker compose run --build test ./runtests.sh -v`
+

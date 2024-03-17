@@ -1,9 +1,5 @@
 #!/usr/bin/env python
-
-#
-# Print addons to test as pip requirements pointing to local directories.
-# There is an option to make them editable or file URLs.
-#
+"""Print addons to test as pip requirements pointing to local directories."""
 
 import argparse
 import os
@@ -39,7 +35,9 @@ def _list_addons_to_test():
     )
 
 
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(
+    description=__doc__
+)
 parser.add_argument(
     "--editable",
     action="store_true",

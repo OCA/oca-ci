@@ -31,7 +31,7 @@ cat test-requirements.txt
 # we create a constraints file with local directory references to the addons to test.
 if python -c 'import sys; sys.exit(sys.version_info < (3,6))' ; then
     # python >= 3.6
-    oca_list_addons_to_test_as_reqs >> test-constraints.txt
+    oca_list_addons_to_test_as_url_reqs >> test-constraints.txt
 else
     # old python where pip does not support URL constraints
     touch test-constraints.txt

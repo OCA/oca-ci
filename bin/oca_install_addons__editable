@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#
+# Install addons to test in editable mode. This will install all python dependencies
+# from PyPI, including OCA addons from other repos.
+#
+
+set -ex
+
+# pre-install build tools for faster installation with --no-build-isolation
+# Note that --no-build-isolation wont work if some dependencies have no wheel
+# available and need to be built with additional build-system requirements.
+# The long term solution for this perf issue is to have pip cache build environments.
+pip install setuptools-odoo wheel "whool ; python_version>='3.7'"
+
+oca_list_addons_to_test_as_url_reqs --editable >> test-requirements.txt
+
+cat test-requirements.txt
+
+# Disable git versioning strategies for performance reasons.
+# Disable build isolation for performance reasons.
+env SETUPTOOLS_ODOO_POST_VERSION_STRATEGY_OVERRIDE=none \
+    WHOOL_POST_VERSION_STRATEGY_OVERRIDE=none \
+    pip install --no-build-isolation -r test-requirements.txt

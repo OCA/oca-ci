@@ -7,8 +7,8 @@ services:
         python_version: "3.10"
         odoo_version: "16.0"
     volumes:
-      - .:/mnt/tests
-    working_dir: /mnt/tests
+      - ..:/mnt/oca-ci
+    working_dir: /mnt/oca-ci/tests
     depends_on:
       - postgres
   postgres:

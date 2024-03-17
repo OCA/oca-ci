@@ -1,12 +1,13 @@
 #!/usr/bin/env python
-
-#
-# Print addons to test as pip requirements pointing to local directories.
-# There is an option to make them editable or file URLs.
-#
+"""Print addons to test as pip requirements pointing to local directories.
+Addons that are referenced as direct URLs in test-requirements.txt are ignored
+because they are going to be installed from there, as test-requirements.txt
+must have priority over the local repo, when there are PR references in it.
+"""
 
 import argparse
 import os
+import re
 import subprocess
 from pathlib import Path
 
@@ -39,7 +40,21 @@ def _list_addons_to_test():
     )
 
 
-parser = argparse.ArgumentParser()
+def _addons_in_test_requirements(addons_dir):
+    """Return a set of addon names that have direct URL requirements in test-requirements.txt."""
+    test_requirements_path = addons_dir / "test-requirements.txt"
+    if not test_requirements_path.exists():
+        return set()
+    url_addon_regex = re.compile(r"^odoo\d*-addon-(?P<addon_name>[a-zA-Z0-9_-]+) *@")
+    res = set()
+    for line in test_requirements_path.read_text().splitlines():
+        match = url_addon_regex.match(line)
+        if match:
+            res.add(match.group("addon_name").replace("-", "_"))
+    return res
+
+
+parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument(
     "--editable",
     action="store_true",
@@ -48,7 +63,10 @@ parser.add_argument(
 args = parser.parse_args()
 
 addons_dir = Path(os.getenv("ADDONS_DIR", "."))
+addons_to_skip = _addons_in_test_requirements(addons_dir)
 for addon_name in _list_addons_to_test():
+    if addon_name in addons_to_skip:
+        continue
     pyproject_path = addons_dir / addon_name / "pyproject.toml"
     if pyproject_path.exists():
         print(_make_addon_req(pyproject_path.parent, args.editable))

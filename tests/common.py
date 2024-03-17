@@ -87,3 +87,11 @@ def did_run_test_module(output, test_module):
     test_module is the full name of the test (addon_name.tests.test_module).
     """
     return "odoo.addons." + test_module in output
+
+
+def make_addon_dist_name(addon_name):
+    odoo_series = int(os.getenv("ODOO_VERSION").partition(".")[0])
+    return "odoo{odoo_series}-addon-{name}".format(
+        name=addon_name,
+        odoo_series=odoo_series if odoo_series < 15 else "",
+    )

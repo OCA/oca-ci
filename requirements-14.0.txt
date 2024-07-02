@@ -1,0 +1,5 @@
+https://raw.githubusercontent.com/OCA/OCB/14.0/requirements.txt
+
+# other test requirements
+coverage
+websocket-client

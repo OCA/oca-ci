@@ -172,3 +172,10 @@ jobs:
           cache-to: type=inline
           push: true
         if: ${{ github.repository_owner == 'OCA' && github.ref == 'refs/heads/master' }}
+  workflow-keepalive:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - uses: liskin/gh-workflow-keepalive@v1

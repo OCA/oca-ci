@@ -4,7 +4,7 @@
 # Run tests. Use unbuffer to get a colored output.
 #
 
-set -ex
+set -exo pipefail
 
 oca_wait_for_postgres
 
@@ -18,4 +18,4 @@ unbuffer coverage run --include "${ADDONS_DIR}/*" --branch \
     -d ${PGDATABASE} \
     -i ${ADDONS} \
     --test-enable \
-    --stop-after-init
+    --stop-after-init | oca_checklog_odoo

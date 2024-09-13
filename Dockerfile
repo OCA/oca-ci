@@ -89,6 +89,8 @@ RUN apt-get update -qq \
 
 # We use manifestoo to check licenses, development status and list addons and dependencies
 RUN pipx install --pip-args="--no-cache-dir" "manifestoo>=0.3.1"
+# Used in oca_checklog_odoo to check odoo logs for errors and warnings
+RUN pipx install --pip-args="--no-cache-dir" checklog-odoo
 
 # Install pyproject-dependencies helper scripts.
 ARG build_deps="setuptools-odoo wheel whool"
@@ -154,3 +156,4 @@ ENV INCLUDE=
 ENV EXCLUDE=
 ENV OCA_GIT_USER_NAME=oca-ci
 ENV OCA_GIT_USER_EMAIL=oca-ci@odoo-community.org
+ENV OCA_ENABLE_CHECKLOG_ODOO=

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+#
+# Check if odoo logs contain errors. Assumes logs will come from stdin
+#
+
+if [ -n "${OCA_ENABLE_CHECKLOG_ODOO}" ]; then
+    checklog-odoo
+else
+    cat
+fi

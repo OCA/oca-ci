@@ -48,9 +48,10 @@ RUN curl -sSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
     && apt-get update -qq \
     && DEBIAN_FRONTEND=noninteractive apt-get install -qq postgresql-client-12
 
-# Install Google Chrome for browser tests
-RUN curl -sSL https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o /tmp/chrome.deb \
-    && apt-get -y install --no-install-recommends /tmp/chrome.deb \
+# Install Google following Odoo's Runbot guideline https://github.com/odoo/runbot/blob/f8f435d468135486146a2e61e8d15d0f453c0e15/runbot/data/dockerfile_data.xml#L139-L140
+RUN curl -sSL https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_126.0.6478.182-1_amd64.deb -o /tmp/chrome.deb \
+    && apt-get update -qq \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -qq -y --no-install-recommends /tmp/chrome.deb  \
     && rm /tmp/chrome.deb
 
 RUN add-apt-repository -y ppa:deadsnakes/ppa

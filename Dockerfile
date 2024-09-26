@@ -1,7 +1,7 @@
 ARG codename=focal
 
 FROM ubuntu:$codename
-ENV LANG C.UTF-8
+ENV LANG=C.UTF-8
 USER root
 
 # Basic dependencies

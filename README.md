@@ -38,6 +38,7 @@ Environment variables:
 - `EXCLUDE=`
 - `OCA_GIT_USER_NAME=oca-ci`: git user name to commit `.pot` files
 - `OCA_GIT_USER_EMAIL=oca-ci@odoo-community.org`: git user email to commit
+- `OCA_ENABLE_CHECKLOG_ODOO=`: enable odoo log error checking
   `.pot` files
 
 Available commands:
@@ -54,6 +55,7 @@ Available commands:
 - `oca_git_push_if_remote_did_not_change`: push local commits unless the remote
   tracked branch has evolved.
 - `oca_export_and_push_pot` combines the two previous commands.
+- `oca_checklog_odoo` checks odoo logs for errors (including warnings)
 
 ## Build
 

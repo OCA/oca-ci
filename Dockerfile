@@ -112,7 +112,8 @@ ARG odoo_version
 # We use requirements from OCB for easier maintenance of older versions.
 ADD https://raw.githubusercontent.com/OCA/OCB/$odoo_version/requirements.txt /tmp/ocb-requirements.txt
 RUN pip install --no-cache-dir \
-      -r /tmp/ocb-requirements.txt
+      -r /tmp/ocb-requirements.txt \
+      packaging
 
 # Install other test requirements.
 # - coverage

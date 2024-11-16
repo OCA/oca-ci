@@ -4,7 +4,7 @@ set -ex
 # show pip config
 pip config list
 
-oca_install_addons__deps_and_addons_path
+oca_install_addons__${OCA_INSTALL_ADDONS_MODE:-deps_and_addons_path}
 
 # show what we have installed
 pip freeze

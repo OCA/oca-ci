@@ -111,7 +111,12 @@ ARG odoo_version
 # Install Odoo requirements (use ADD for correct layer caching).
 # We use requirements from OCB for easier maintenance of older versions.
 ADD https://raw.githubusercontent.com/OCA/OCB/$odoo_version/requirements.txt /tmp/ocb-requirements.txt
-RUN pip install --no-cache-dir \
+# The sed command is to use the latest version of gevent and greenlet. The
+# latest version works with all versions of Odoo that we support here, and the
+# oldest pinned in Odoo's requirements.txt don't have wheels, and don't build
+# anymore with the latest cython.
+RUN sed -i -E "s/^(gevent|greenlet)==.*/\1/" /tmp/ocb-requirements.txt \
+ && pip install --no-cache-dir \
       -r /tmp/ocb-requirements.txt \
       packaging
 

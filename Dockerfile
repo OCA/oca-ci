@@ -128,11 +128,15 @@ RUN pip install --no-cache-dir \
   websocket-client
 
 # Install Odoo (use ADD for correct layer caching)
-ARG odoo_org_repo=odoo/odoo
+ARG odoo_org_repo=EMAS-Solutions/odoo
+ARG odoo_enterprise_repo=EMAS-Solutions/enterprise
 ADD https://api.github.com/repos/$odoo_org_repo/git/refs/heads/$odoo_version /tmp/odoo-version.json
 RUN mkdir /tmp/getodoo \
+    mkdir /tmp/enterprise \
     && (curl -sSL https://github.com/$odoo_org_repo/tarball/$odoo_version | tar -C /tmp/getodoo -xz) \
+    && (curl -sSL https://github.com/$odoo_enterprise_repo/tarball/$odoo_version | tar -C /tmp/enterprise -xz) \
     && mv /tmp/getodoo/* /opt/odoo \
+    && mv /tmp/enterprise/* /opt/odoo/addons \
     && rmdir /tmp/getodoo
 RUN pip install --no-cache-dir -e /opt/odoo \
     && pip list
@@ -160,6 +164,6 @@ ENV ADDONS_DIR=.
 ENV ADDONS_PATH=/opt/odoo/addons
 ENV INCLUDE=
 ENV EXCLUDE=
-ENV OCA_GIT_USER_NAME=oca-ci
-ENV OCA_GIT_USER_EMAIL=oca-ci@odoo-community.org
+ENV OCA_GIT_USER_NAME=DevsEMAS
+ENV OCA_GIT_USER_EMAIL=devs_apps@emas.es
 ENV OCA_ENABLE_CHECKLOG_ODOO=

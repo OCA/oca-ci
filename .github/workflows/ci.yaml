@@ -23,6 +23,7 @@ jobs:
             codename: jammy
             odoo_version: "17.0"
             odoo_org_repo: "EMAS-Solutions/odoo"
+            odoo_enterprise_repo: "EMAS-Solutions/enterprise"
             image_name: py3.10-odoo17.0
 
     services:
@@ -49,7 +50,7 @@ jobs:
           username: genisemas
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Docker Image
+      - name: Build Docker Image with Secret
         uses: docker/build-push-action@v6
         with:
           build-args: |
@@ -57,7 +58,9 @@ jobs:
             python_version=${{ matrix.python_version }}
             odoo_version=${{ matrix.odoo_version }}
             odoo_org_repo=${{ matrix.odoo_org_repo }}
-            setuptools_constraint=${{ matrix.setuptools_constraint }}
+            odoo_enterprise_repo=${{ matrix.odoo_enterprise_repo }}
+          secrets: |
+            PAT=${{ secrets.PAT }}
           tags: |
             ghcr.io/genisemas/oca-ci/${{ matrix.image_name }}:latest
           labels: |
@@ -81,7 +84,9 @@ jobs:
             python_version=${{ matrix.python_version }}
             odoo_version=${{ matrix.odoo_version }}
             odoo_org_repo=${{ matrix.odoo_org_repo }}
-            setuptools_constraint=${{ matrix.setuptools_constraint }}
+            odoo_enterprise_repo=${{ matrix.odoo_enterprise_repo }}
+          secrets: |
+            PAT=${{ secrets.PAT }}
           tags: |
             ghcr.io/genisemas/oca-ci/${{ matrix.image_name }}:latest
           labels: |

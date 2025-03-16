@@ -1,4 +1,6 @@
 ARG codename=focal
+# Accept GitHub PAT as a secret
+ARG GITHUB_PAT
 
 FROM ubuntu:$codename
 ENV LANG=C.UTF-8

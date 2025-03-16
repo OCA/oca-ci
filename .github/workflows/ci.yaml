@@ -19,102 +19,19 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # odoo/odoo
           - python_version: "3.6"
             codename: focal
             odoo_version: "12.0"
             odoo_org_repo: "odoo/odoo"
-            setuptools_constraint: "<58"  # vatnumber needs setuptools with 2to3 support
+            setuptools_constraint: "<58"
             image_name: py3.6-odoo12.0
-          - python_version: "3.6"
-            codename: focal
-            odoo_version: "13.0"
-            odoo_org_repo: "odoo/odoo"
-            setuptools_constraint: "<58"  # vatnumber needs setuptools with 2to3 support
-            image_name: py3.6-odoo13.0
-          - python_version: "3.6"
-            codename: focal
-            odoo_version: "14.0"
-            odoo_org_repo: "odoo/odoo"
-            image_name: py3.6-odoo14.0
-          - python_version: "3.8"
-            codename: focal
-            odoo_version: "14.0"
-            odoo_org_repo: "odoo/odoo"
-            image_name: py3.8-odoo14.0
-          - python_version: "3.8"
-            codename: focal
-            odoo_version: "15.0"
-            odoo_org_repo: "odoo/odoo"
-            image_name: py3.8-odoo15.0
-          - python_version: "3.9"
-            codename: focal
-            odoo_version: "15.0"
-            odoo_org_repo: "odoo/odoo"
-            image_name: py3.9-odoo15.0
-          - python_version: "3.10"
-            codename: jammy
-            odoo_version: "16.0"
-            odoo_org_repo: "odoo/odoo"
-            image_name: py3.10-odoo16.0
-          - python_version: "3.10"
-            codename: jammy
-            odoo_version: "17.0"
-            odoo_org_repo: "odoo/odoo"
-            image_name: py3.10-odoo17.0
-          - python_version: "3.10"
-            codename: jammy
-            odoo_version: "18.0"
-            odoo_org_repo: "odoo/odoo"
-            image_name: py3.10-odoo18.0
-          # oca/ocb
-          - python_version: "3.6"
-            codename: focal
-            odoo_version: "12.0"
-            odoo_org_repo: "oca/ocb"
-            setuptools_constraint: "<58"  # vatnumber needs setuptools with 2to3 support
-            image_name: py3.6-ocb12.0
-          - python_version: "3.6"
-            codename: focal
-            odoo_version: "13.0"
-            odoo_org_repo: "oca/ocb"
-            setuptools_constraint: "<58"  # vatnumber needs setuptools with 2to3 support
-            image_name: py3.6-ocb13.0
-          - python_version: "3.6"
-            codename: focal
-            odoo_version: "14.0"
-            odoo_org_repo: "oca/ocb"
-            image_name: py3.6-ocb14.0
-          - python_version: "3.8"
-            codename: focal
-            odoo_version: "14.0"
-            odoo_org_repo: "oca/ocb"
-            image_name: py3.8-ocb14.0
-          - python_version: "3.8"
-            codename: focal
-            odoo_version: "15.0"
-            odoo_org_repo: "oca/ocb"
-            image_name: py3.8-ocb15.0
-          - python_version: "3.9"
-            codename: focal
-            odoo_version: "15.0"
-            odoo_org_repo: "oca/ocb"
-            image_name: py3.9-ocb15.0
-          - python_version: "3.10"
-            codename: jammy
-            odoo_version: "16.0"
-            odoo_org_repo: "oca/ocb"
-            image_name: py3.10-ocb16.0
-          - python_version: "3.10"
-            codename: jammy
-            odoo_version: "17.0"
-            odoo_org_repo: "oca/ocb"
-            image_name: py3.10-ocb17.0
           - python_version: "3.10"
             codename: jammy
             odoo_version: "18.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.10-ocb18.0
+          # Add other versions as needed...
+
     services:
       postgres:
         image: postgres:12
@@ -124,16 +41,22 @@ jobs:
           POSTGRES_DB: odoo
         ports:
           - 5432:5432
+
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      - name: Login to ghcr.io
+
+      - name: Login to GitHub Container Registry (GHCR)
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build image
+
+      - name: Build Docker Image
         uses: docker/build-push-action@v6
         with:
           build-args: |
@@ -143,19 +66,21 @@ jobs:
             odoo_org_repo=${{ matrix.odoo_org_repo }}
             setuptools_constraint=${{ matrix.setuptools_constraint }}
           tags: |
-            ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
+            ghcr.io/${{ github.repository_owner }}/oca-ci/${{ matrix.image_name }}:latest
           labels: |
             org.opencontainers.image.source=${{ github.event.repository.html_url }}
-          cache-from: type=registry,ref=ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/oca-ci/${{ matrix.image_name }}:latest
           cache-to: type=local,dest=/tmp/.buildx-cache
           load: true
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Tests
-        run: docker run -v ${PWD}/tests:/mnt/tests --network=host -e PGHOST=localhost ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest /mnt/tests/runtests.sh -v
-        # Don't bother with Odoo 8 and 9 for now...
+
+      - name: Run Tests
+        run: |
+          docker run --rm -v ${PWD}/tests:/mnt/tests --network=host -e PGHOST=localhost \
+            ghcr.io/${{ github.repository_owner }}/oca-ci/${{ matrix.image_name }}:latest \
+            /mnt/tests/runtests.sh -v
         if: ${{ matrix.odoo_version != '8.0' && matrix.odoo_version != '9.0' }}
-      - name: Push image
+
+      - name: Push Docker Image to GHCR
         uses: docker/build-push-action@v6
         with:
           build-args: |

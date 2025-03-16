@@ -19,18 +19,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - python_version: "3.6"
-            codename: focal
-            odoo_version: "12.0"
-            odoo_org_repo: "odoo/odoo"
-            setuptools_constraint: "<58"
-            image_name: py3.6-odoo12.0
           - python_version: "3.10"
             codename: jammy
-            odoo_version: "18.0"
-            odoo_org_repo: "oca/ocb"
-            image_name: py3.10-ocb18.0
-          # Add other versions as needed...
+            odoo_version: "17.0"
+            odoo_org_repo: "EMAS-Solutions/odoo"
+            image_name: py3.10-odoo17.0
 
     services:
       postgres:

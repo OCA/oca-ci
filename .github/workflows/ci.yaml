@@ -53,7 +53,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
+          username: genisemas
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker Image
@@ -66,17 +66,17 @@ jobs:
             odoo_org_repo=${{ matrix.odoo_org_repo }}
             setuptools_constraint=${{ matrix.setuptools_constraint }}
           tags: |
-            ghcr.io/${{ github.repository_owner }}/oca-ci/${{ matrix.image_name }}:latest
+            ghcr.io/genisemas/oca-ci/${{ matrix.image_name }}:latest
           labels: |
             org.opencontainers.image.source=${{ github.event.repository.html_url }}
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/oca-ci/${{ matrix.image_name }}:latest
+          cache-from: type=registry,ref=ghcr.io/genisemas/oca-ci/${{ matrix.image_name }}:latest
           cache-to: type=local,dest=/tmp/.buildx-cache
           load: true
 
       - name: Run Tests
         run: |
           docker run --rm -v ${PWD}/tests:/mnt/tests --network=host -e PGHOST=localhost \
-            ghcr.io/${{ github.repository_owner }}/oca-ci/${{ matrix.image_name }}:latest \
+            ghcr.io/genisemas/oca-ci/${{ matrix.image_name }}:latest \
             /mnt/tests/runtests.sh -v
         if: ${{ matrix.odoo_version != '8.0' && matrix.odoo_version != '9.0' }}
 
@@ -90,7 +90,7 @@ jobs:
             odoo_org_repo=${{ matrix.odoo_org_repo }}
             setuptools_constraint=${{ matrix.setuptools_constraint }}
           tags: |
-            ghcr.io/${{ github.repository_owner }}/oca-ci/${{ matrix.image_name }}:latest
+            ghcr.io/genisemas/oca-ci/${{ matrix.image_name }}:latest
           labels: |
             org.opencontainers.image.source=${{ github.event.repository.html_url }}
           cache-from: type=local,src=/tmp/.buildx-cache

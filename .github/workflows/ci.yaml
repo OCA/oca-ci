@@ -24,6 +24,7 @@ jobs:
             odoo_version: "17.0"
             odoo_org_repo: "EMAS-Solutions/odoo"
             odoo_enterprise_repo: "EMAS-Solutions/enterprise"
+            github_pat: ${{ PAT }}
             image_name: py3.10-odoo17.0
 
     services:
@@ -85,8 +86,9 @@ jobs:
             odoo_version=${{ matrix.odoo_version }}
             odoo_org_repo=${{ matrix.odoo_org_repo }}
             odoo_enterprise_repo=${{ matrix.odoo_enterprise_repo }}
+            github_pat=${{ matrix.github_pat }}
           secrets: |
-            PAT=${{ secrets.PAT }}
+            github_pat=${{ secrets.PAT }}
           tags: |
             ghcr.io/genisemas/oca-ci/${{ matrix.image_name }}:latest
           labels: |

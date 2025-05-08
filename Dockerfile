@@ -134,7 +134,8 @@ RUN mkdir /tmp/getodoo \
     && (curl -sSL https://github.com/$odoo_org_repo/tarball/$odoo_version | tar -C /tmp/getodoo -xz) \
     && mv /tmp/getodoo/* /opt/odoo \
     && rmdir /tmp/getodoo
-RUN pip install --no-cache-dir -e /opt/odoo \
+ARG odoo_config_setting="--config-setting=editable_mode=compat"
+RUN pip install --no-cache-dir -e /opt/odoo $odoo_config_setting \
     && pip list
 
 # Make an empty odoo.cfg

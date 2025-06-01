@@ -115,7 +115,7 @@ jobs:
       #       codename=${{ matrix.codename }}
       #       python_version=${{ matrix.python_version }}
       #       odoo_version=${{ matrix.odoo_version }}
-      #     tags: ghcr.io/YOUR_ORG/YOUR_IMAGE:${{ matrix.image_name }} # Adjust image tag
+      #     tags: ghcr.io/letzdoo/letzdoo-ci/${{ matrix.image_name }} # Adjust image tag
       #     load: true # if tests run on the same job
 
       # Test execution step
@@ -133,7 +133,7 @@ jobs:
             -v ${{ github.workspace }}:/mnt/custom-addons \
             -e ADDONS_PATH="/mnt/custom-addons:/opt/odoo/addons" \
             # Potentially other existing env vars and volume mounts
-            ghcr.io/YOUR_ORG/YOUR_IMAGE:${{ matrix.image_name }} \
+            ghcr.io/letzdoo/letzdoo-ci/${{ matrix.image_name }} \
             /mnt/tests/runtests.sh -v # Or your test execution script
 ```
 

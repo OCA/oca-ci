@@ -186,10 +186,10 @@ jobs:
             setuptools_constraint=${{ matrix.setuptools_constraint }}
             odoo_config_setting=${{ matrix.odoo_config_setting }}
           tags: |
-            ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
+            ghcr.io/letzdoo/letzdoo-ci/${{ matrix.image_name }}:latest
           labels: |
             org.opencontainers.image.source=${{ github.event.repository.html_url }}
-          cache-from: type=registry,ref=ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
+          cache-from: type=registry,ref=ghcr.io/letzdoo/letzdoo-ci/${{ matrix.image_name }}:latest
           cache-to: type=local,dest=/tmp/.buildx-cache
           load: true
       - name: Checkout
@@ -221,7 +221,7 @@ jobs:
       - name: Tests
         env:
           ENTERPRISE_ARGS: "" # Default to empty
-        run: docker run ${{ env.ENTERPRISE_ARGS }} -v ${PWD}/tests:/mnt/tests --network=host -e PGHOST=localhost ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest /mnt/tests/runtests.sh -v
+        run: docker run ${{ env.ENTERPRISE_ARGS }} -v ${PWD}/tests:/mnt/tests --network=host -e PGHOST=localhost ghcr.io/letzdoo/letzdoo-ci/${{ matrix.image_name }}:latest /mnt/tests/runtests.sh -v
         # Don't bother with Odoo 8 and 9 for now...
         if: ${{ matrix.odoo_version != '8.0' && matrix.odoo_version != '9.0' }}
       - name: Push image
@@ -235,7 +235,7 @@ jobs:
             setuptools_constraint=${{ matrix.setuptools_constraint }}
             odoo_config_setting=${{ matrix.odoo_config_setting }}
           tags: |
-            ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
+            ghcr.io/letzdoo/letzdoo-ci/${{ matrix.image_name }}:latest
           labels: |
             org.opencontainers.image.source=${{ github.event.repository.html_url }}
           cache-from: type=local,src=/tmp/.buildx-cache

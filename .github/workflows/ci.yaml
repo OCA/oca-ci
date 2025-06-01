@@ -99,13 +99,16 @@ jobs:
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           # Add other enterprise repo hosts if not github.com
           # Example for a different host: ssh-keyscan -H your.enterprise.githost.com >> ~/.ssh/known_hosts
-          echo "Host github.com
-  StrictHostKeyChecking no
-" > ~/.ssh/config
+          cat > ~/.ssh/config << 'EOF'
+          Host github.com
+            StrictHostKeyChecking no
+          EOF
           # If using a different git host for enterprise, configure it here too.
-          # Example: echo "Host your.enterprise.githost.com
-  StrictHostKeyChecking no
-" >> ~/.ssh/config
+          # Example:
+          # cat >> ~/.ssh/config << 'EOF'
+          # Host your.enterprise.githost.com
+          #   StrictHostKeyChecking no
+          # EOF
       - name: Checkout Odoo Enterprise
         if: matrix.odoo_enterprise_repo_url != '' && secrets.ODOO_ENTERPRISE_SSH_PRIVATE_KEY != ''
         run: git clone --depth 1 --branch ${{ matrix.odoo_enterprise_version }} ${{ matrix.odoo_enterprise_repo_url }} ${{ github.workspace }}/odoo-enterprise

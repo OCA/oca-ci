@@ -27,7 +27,7 @@ jobs:
             image_name: py3.10-odoo17.0
             odoo_config_setting: "--config-setting=editable_mode=compat"
             odoo_enterprise_repo_url: "git@github.com:odoo/enterprise.git"
-            odoo_enterprise_version: ${{ matrix.odoo_version }}
+            odoo_enterprise_version: "17.0"
           - python_version: "3.10"
             codename: jammy
             odoo_version: "18.0"
@@ -35,7 +35,7 @@ jobs:
             image_name: py3.10-odoo18.0
             odoo_config_setting: "--config-setting=editable_mode=compat"
             odoo_enterprise_repo_url: "git@github.com:odoo/enterprise.git"
-            odoo_enterprise_version: ${{ matrix.odoo_version }}
+            odoo_enterprise_version: "18.0"
           # oca/ocb
           - python_version: "3.10"
             codename: jammy
@@ -43,14 +43,14 @@ jobs:
             odoo_org_repo: "oca/ocb"
             image_name: py3.10-ocb17.0
             odoo_enterprise_repo_url: "git@github.com:odoo/enterprise.git"
-            odoo_enterprise_version: ${{ matrix.odoo_version }}
+            odoo_enterprise_version: "17.0"
           - python_version: "3.10"
             codename: jammy
             odoo_version: "18.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.10-ocb18.0
             odoo_enterprise_repo_url: "git@github.com:odoo/enterprise.git"
-            odoo_enterprise_version: ${{ matrix.odoo_version }}
+            odoo_enterprise_version: "18.0"
     services:
       postgres:
         image: postgres:12

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+#
+# Install addons to test in editable mode. This will install all python dependencies
+# from PyPI, including OCA addons from other repos.
+#
+
+set -ex
+
+oca_list_addons_to_test_as_url_reqs --editable >> test-requirements.txt
+
+cat test-requirements.txt
+
+# Disable git versioning strategies for better performance, as we
+# are not interested in git post versions here.
+env SETUPTOOLS_ODOO_POST_VERSION_STRATEGY_OVERRIDE=none \
+    WHOOL_POST_VERSION_STRATEGY_OVERRIDE=none \
+    uv pip install -r test-requirements.txt

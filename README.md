@@ -50,11 +50,13 @@ Integration is controlled by GitHub Actions matrix variables and a repository se
 ### Required Configuration
 
 1.  **Matrix Variables** (in your `.github/workflows/ci.yaml`):
-    *   `odoo_enterprise_repo_url`: The SSH URL of your private Odoo Enterprise repository (e.g., `git@github.com:YOUR_ORG/enterprise.git`).
-    *   `odoo_enterprise_version`: The specific branch or tag to check out from your Odoo Enterprise repository (e.g., `16.0`, `17.0`).
+    *   `odoo_enterprise_repo_url`: The SSH URL of the Odoo Enterprise repository. This now defaults to `git@github.com:odoo/enterprise.git`. You only need to set this in your matrix if you use a different enterprise repository.
+    *   `odoo_enterprise_version`: The specific branch or tag to check out from the Odoo Enterprise repository. This now defaults to the value of `odoo_version` for the current CI job (e.g., if `odoo_version` is `16.0`, this will also default to `16.0`). You only need to set this if your enterprise versioning scheme differs from your Odoo Community version.
 
-2.  **GitHub Secret**:
-    *   `ODOO_ENTERPRISE_SSH_PRIVATE_KEY`: This secret must be configured in your GitHub repository's settings (`Settings` > `Secrets and variables` > `Actions`). It should contain the private SSH key that has read-access to the Odoo Enterprise repository specified by `odoo_enterprise_repo_url`.
+    You only need to explicitly define these variables in your CI matrix if you wish to override these default values.
+
+2.  **GitHub Secret** (Mandatory for Enterprise usage):
+    *   `ODOO_ENTERPRISE_SSH_PRIVATE_KEY`: This secret must be configured in your GitHub repository's settings (`Settings` > `Secrets and variables` > `Actions`). It should contain the private SSH key that has read-access to the Odoo Enterprise repository (either the default or your custom one). There is no default for this secret; it must be provided if you intend to use Odoo Enterprise modules.
 
 ### How it Works
 
@@ -88,9 +90,9 @@ jobs:
             odoo_version: "16.0" # This should match your enterprise version
             odoo_org_repo: "odoo/odoo" # Or "oca/ocb"
             image_name: py3.10-odoo16.0 # Ensure this matches your built image
-            # Add these lines for Odoo Enterprise
-            odoo_enterprise_repo_url: "git@github.com:YOUR_ORG/enterprise.git" # Replace with your actual enterprise repo SSH URL
-            odoo_enterprise_version: "16.0" # Replace with your target enterprise version/branch
+            # Odoo Enterprise settings (these are the defaults, override if needed):
+            odoo_enterprise_repo_url: "git@github.com:odoo/enterprise.git"
+            odoo_enterprise_version: "${{ matrix.odoo_version }}" # Defaults to the job's odoo_version
 
     steps:
       - name: Checkout # Checks out your current project (e.g., custom addons)

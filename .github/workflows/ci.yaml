@@ -109,16 +109,8 @@ jobs:
           # Host your.enterprise.githost.com
           #   StrictHostKeyChecking no
           # EOF
-      - name: Checkout Odoo Enterprise
-        if: matrix.odoo_enterprise_repo_url != '' && secrets.ODOO_ENTERPRISE_SSH_PRIVATE_KEY != ''
-        run: git clone --depth 1 --branch ${{ matrix.odoo_enterprise_version }} ${{ matrix.odoo_enterprise_repo_url }} ${{ github.workspace }}/odoo-enterprise
-      - name: Set Enterprise Docker Args
-        if: matrix.odoo_enterprise_repo_url != '' && secrets.ODOO_ENTERPRISE_SSH_PRIVATE_KEY != ''
-        run: echo 'ENTERPRISE_ARGS=-v ${{ github.workspace }}/odoo-enterprise:/opt/odoo-enterprise -e ADDONS_PATH="/opt/odoo-enterprise:/opt/odoo/addons"' >> $GITHUB_ENV
       - name: Tests
-        env:
-          ENTERPRISE_ARGS: "" # Default to empty
-        run: docker run ${{ env.ENTERPRISE_ARGS }} -v ${PWD}/tests:/mnt/tests --network=host -e PGHOST=localhost ghcr.io/letzdoo/letzdoo-ci/${{ matrix.image_name }}:latest /mnt/tests/runtests.sh -v
+        run: docker run -v ${PWD}/tests:/mnt/tests --network=host -e PGHOST=localhost ghcr.io/letzdoo/letzdoo-ci/${{ matrix.image_name }}:latest /mnt/tests/runtests.sh -v
         # Don't bother with Odoo 8 and 9 for now...
         if: ${{ matrix.odoo_version != '8.0' && matrix.odoo_version != '9.0' }}
       - name: Push image

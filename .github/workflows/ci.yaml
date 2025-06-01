@@ -20,107 +20,37 @@ jobs:
       matrix:
         include:
           # odoo/odoo
-          - python_version: "3.6"
-            codename: focal
-            odoo_version: "12.0"
-            odoo_org_repo: "odoo/odoo"
-            setuptools_constraint: "<58"  # vatnumber needs setuptools with 2to3 support
-            image_name: py3.6-odoo12.0
-          - python_version: "3.6"
-            codename: focal
-            odoo_version: "13.0"
-            odoo_org_repo: "odoo/odoo"
-            setuptools_constraint: "<58"  # vatnumber needs setuptools with 2to3 support
-            image_name: py3.6-odoo13.0
-          - python_version: "3.6"
-            codename: focal
-            odoo_version: "14.0"
-            odoo_org_repo: "odoo/odoo"
-            image_name: py3.6-odoo14.0
-          - python_version: "3.8"
-            codename: focal
-            odoo_version: "14.0"
-            odoo_org_repo: "odoo/odoo"
-            image_name: py3.8-odoo14.0
-            odoo_config_setting: "--config-setting=editable_mode=compat"
-          - python_version: "3.8"
-            codename: focal
-            odoo_version: "15.0"
-            odoo_org_repo: "odoo/odoo"
-            image_name: py3.8-odoo15.0
-            odoo_config_setting: "--config-setting=editable_mode=compat"
-          - python_version: "3.9"
-            codename: focal
-            odoo_version: "15.0"
-            odoo_org_repo: "odoo/odoo"
-            image_name: py3.9-odoo15.0
-            odoo_config_setting: "--config-setting=editable_mode=compat"
-          - python_version: "3.10"
-            codename: jammy
-            odoo_version: "16.0"
-            odoo_org_repo: "odoo/odoo"
-            image_name: py3.10-odoo16.0
-            odoo_config_setting: "--config-setting=editable_mode=compat"
           - python_version: "3.10"
             codename: jammy
             odoo_version: "17.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.10-odoo17.0
             odoo_config_setting: "--config-setting=editable_mode=compat"
+            odoo_enterprise_repo_url: "git@github.com:odoo/enterprise.git"
+            odoo_enterprise_version: ${{ matrix.odoo_version }}
           - python_version: "3.10"
             codename: jammy
             odoo_version: "18.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.10-odoo18.0
             odoo_config_setting: "--config-setting=editable_mode=compat"
+            odoo_enterprise_repo_url: "git@github.com:odoo/enterprise.git"
+            odoo_enterprise_version: ${{ matrix.odoo_version }}
           # oca/ocb
-          - python_version: "3.6"
-            codename: focal
-            odoo_version: "12.0"
-            odoo_org_repo: "oca/ocb"
-            setuptools_constraint: "<58"  # vatnumber needs setuptools with 2to3 support
-            image_name: py3.6-ocb12.0
-          - python_version: "3.6"
-            codename: focal
-            odoo_version: "13.0"
-            odoo_org_repo: "oca/ocb"
-            setuptools_constraint: "<58"  # vatnumber needs setuptools with 2to3 support
-            image_name: py3.6-ocb13.0
-          - python_version: "3.6"
-            codename: focal
-            odoo_version: "14.0"
-            odoo_org_repo: "oca/ocb"
-            image_name: py3.6-ocb14.0
-          - python_version: "3.8"
-            codename: focal
-            odoo_version: "14.0"
-            odoo_org_repo: "oca/ocb"
-            image_name: py3.8-ocb14.0
-          - python_version: "3.8"
-            codename: focal
-            odoo_version: "15.0"
-            odoo_org_repo: "oca/ocb"
-            image_name: py3.8-ocb15.0
-          - python_version: "3.9"
-            codename: focal
-            odoo_version: "15.0"
-            odoo_org_repo: "oca/ocb"
-            image_name: py3.9-ocb15.0
-          - python_version: "3.10"
-            codename: jammy
-            odoo_version: "16.0"
-            odoo_org_repo: "oca/ocb"
-            image_name: py3.10-ocb16.0
           - python_version: "3.10"
             codename: jammy
             odoo_version: "17.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.10-ocb17.0
+            odoo_enterprise_repo_url: "git@github.com:odoo/enterprise.git"
+            odoo_enterprise_version: ${{ matrix.odoo_version }}
           - python_version: "3.10"
             codename: jammy
             odoo_version: "18.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.10-ocb18.0
+            odoo_enterprise_repo_url: "git@github.com:odoo/enterprise.git"
+            odoo_enterprise_version: ${{ matrix.odoo_version }}
     services:
       postgres:
         image: postgres:12
@@ -150,16 +80,42 @@ jobs:
             setuptools_constraint=${{ matrix.setuptools_constraint }}
             odoo_config_setting=${{ matrix.odoo_config_setting }}
           tags: |
-            ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
+            ghcr.io/letzdoo/letzdoo-ci/${{ matrix.image_name }}:latest
           labels: |
             org.opencontainers.image.source=${{ github.event.repository.html_url }}
-          cache-from: type=registry,ref=ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
+          cache-from: type=registry,ref=ghcr.io/letzdoo/letzdoo-ci/${{ matrix.image_name }}:latest
           cache-to: type=local,dest=/tmp/.buildx-cache
           load: true
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Install SSH client
+        run: sudo apt-get update && sudo apt-get install -y openssh-client git
+      - name: Setup SSH for Enterprise Repo
+        if: matrix.odoo_enterprise_repo_url != '' && secrets.ODOO_ENTERPRISE_SSH_PRIVATE_KEY != ''
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.ODOO_ENTERPRISE_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          # Add other enterprise repo hosts if not github.com
+          # Example for a different host: ssh-keyscan -H your.enterprise.githost.com >> ~/.ssh/known_hosts
+          echo "Host github.com
+  StrictHostKeyChecking no
+" > ~/.ssh/config
+          # If using a different git host for enterprise, configure it here too.
+          # Example: echo "Host your.enterprise.githost.com
+  StrictHostKeyChecking no
+" >> ~/.ssh/config
+      - name: Checkout Odoo Enterprise
+        if: matrix.odoo_enterprise_repo_url != '' && secrets.ODOO_ENTERPRISE_SSH_PRIVATE_KEY != ''
+        run: git clone --depth 1 --branch ${{ matrix.odoo_enterprise_version }} ${{ matrix.odoo_enterprise_repo_url }} ${{ github.workspace }}/odoo-enterprise
+      - name: Set Enterprise Docker Args
+        if: matrix.odoo_enterprise_repo_url != '' && secrets.ODOO_ENTERPRISE_SSH_PRIVATE_KEY != ''
+        run: echo 'ENTERPRISE_ARGS=-v ${{ github.workspace }}/odoo-enterprise:/opt/odoo-enterprise -e ADDONS_PATH="/opt/odoo-enterprise:/opt/odoo/addons"' >> $GITHUB_ENV
       - name: Tests
-        run: docker run -v ${PWD}/tests:/mnt/tests --network=host -e PGHOST=localhost ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest /mnt/tests/runtests.sh -v
+        env:
+          ENTERPRISE_ARGS: "" # Default to empty
+        run: docker run ${{ env.ENTERPRISE_ARGS }} -v ${PWD}/tests:/mnt/tests --network=host -e PGHOST=localhost ghcr.io/letzdoo/letzdoo-ci/${{ matrix.image_name }}:latest /mnt/tests/runtests.sh -v
         # Don't bother with Odoo 8 and 9 for now...
         if: ${{ matrix.odoo_version != '8.0' && matrix.odoo_version != '9.0' }}
       - name: Push image
@@ -173,7 +129,7 @@ jobs:
             setuptools_constraint=${{ matrix.setuptools_constraint }}
             odoo_config_setting=${{ matrix.odoo_config_setting }}
           tags: |
-            ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest
+            ghcr.io/letzdoo/letzdoo-ci/${{ matrix.image_name }}:latest
           labels: |
             org.opencontainers.image.source=${{ github.event.repository.html_url }}
           cache-from: type=local,src=/tmp/.buildx-cache

@@ -41,6 +41,104 @@ Environment variables:
 - `OCA_ENABLE_CHECKLOG_ODOO=`: enable odoo log error checking
   `.pot` files
 
+## Using Odoo Enterprise Modules
+
+This CI setup allows for the integration of Odoo Enterprise modules at **runtime** during the CI job, rather than building them directly into the Docker images. This provides flexibility and keeps the base Docker images lean.
+
+Integration is controlled by GitHub Actions matrix variables and a repository secret:
+
+### Required Configuration
+
+1.  **Matrix Variables** (in your `.github/workflows/ci.yaml`):
+    *   `odoo_enterprise_repo_url`: The SSH URL of your private Odoo Enterprise repository (e.g., `git@github.com:YOUR_ORG/enterprise.git`).
+    *   `odoo_enterprise_version`: The specific branch or tag to check out from your Odoo Enterprise repository (e.g., `16.0`, `17.0`).
+
+2.  **GitHub Secret**:
+    *   `ODOO_ENTERPRISE_SSH_PRIVATE_KEY`: This secret must be configured in your GitHub repository's settings (`Settings` > `Secrets and variables` > `Actions`). It should contain the private SSH key that has read-access to the Odoo Enterprise repository specified by `odoo_enterprise_repo_url`.
+
+### How it Works
+
+When `odoo_enterprise_repo_url` and `odoo_enterprise_version` are defined in the CI matrix, and the `ODOO_ENTERPRISE_SSH_PRIVATE_KEY` secret is available, the workflow performs the following steps before running the tests:
+
+1.  **SSH Setup**: The runner's SSH environment is configured using the provided private key to allow access to your enterprise repository.
+2.  **Enterprise Code Checkout**: The specified version of your Odoo Enterprise code is checked out from `odoo_enterprise_repo_url` into a directory (e.g., `odoo-enterprise`) in the GitHub Actions runner's workspace.
+3.  **Volume Mounting**: When the Docker container for tests is started, this directory containing the enterprise code is mounted as a volume into `/opt/odoo-enterprise` inside the container.
+4.  **Addons Path Update**: The `ADDONS_PATH` environment variable within the container is automatically prepended with `/opt/odoo-enterprise`, ensuring that Odoo can discover and load these enterprise modules.
+
+If `odoo_enterprise_repo_url` is not provided, is empty, or the `ODOO_ENTERPRISE_SSH_PRIVATE_KEY` secret is missing, these steps are skipped, and the tests will run using only the standard Odoo addons from the base image.
+
+### Example Workflow Configuration
+
+Here’s how you might configure your `.github/workflows/ci.yaml` to use Odoo Enterprise modules:
+
+```yaml
+# .github/workflows/ci.yaml
+name: ci
+on: [push, pull_request]
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python_version: "3.10"
+            codename: "jammy"
+            odoo_version: "16.0" # This should match your enterprise version
+            odoo_org_repo: "odoo/odoo" # Or "oca/ocb"
+            image_name: py3.10-odoo16.0 # Ensure this matches your built image
+            # Add these lines for Odoo Enterprise
+            odoo_enterprise_repo_url: "git@github.com:YOUR_ORG/enterprise.git" # Replace with your actual enterprise repo SSH URL
+            odoo_enterprise_version: "16.0" # Replace with your target enterprise version/branch
+
+    steps:
+      - name: Checkout # Checks out your current project (e.g., custom addons)
+        uses: actions/checkout@v4
+
+      # Docker build steps (Login, Build image, Push image) would be here
+      # These steps build the base Odoo image without enterprise code.
+      # Example:
+      # - name: Set up Docker Buildx
+      #   uses: docker/setup-buildx-action@v3
+      # - name: Login to ghcr.io
+      #   uses: docker/login-action@v3
+      #   with:
+      #     registry: ghcr.io
+      #     username: ${{ github.repository_owner }}
+      #     password: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Build image
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     # build-args for the base image, NOT enterprise ones
+      #     build-args: |
+      #       codename=${{ matrix.codename }}
+      #       python_version=${{ matrix.python_version }}
+      #       odoo_version=${{ matrix.odoo_version }}
+      #     tags: ghcr.io/YOUR_ORG/YOUR_IMAGE:${{ matrix.image_name }} # Adjust image tag
+      #     load: true # if tests run on the same job
+
+      # Test execution step
+      - name: Tests
+        env:
+          # Pass the SSH key to the test step environment
+          ODOO_ENTERPRISE_SSH_PRIVATE_KEY: ${{ secrets.ODOO_ENTERPRISE_SSH_PRIVATE_KEY }}
+          # PGHOST is usually set if your Postgres service is named 'postgres'
+          PGHOST: localhost # Or your postgres service name if different
+        run: |
+          # The actual docker run command will be more complex
+          # and include volume mounts for your project's addons, etc.
+          # The ENTERPRISE_ARGS are now handled internally by the ci.yaml script steps
+          docker run \
+            -v ${{ github.workspace }}:/mnt/custom-addons \
+            -e ADDONS_PATH="/mnt/custom-addons:/opt/odoo/addons" \
+            # Potentially other existing env vars and volume mounts
+            ghcr.io/YOUR_ORG/YOUR_IMAGE:${{ matrix.image_name }} \
+            /mnt/tests/runtests.sh -v # Or your test execution script
+```
+
+**Note:** The example above is simplified. Your actual `docker run` command in the "Tests" step will likely include other volume mounts (e.g., for your custom addons) and environment variables. The key is that the `odoo_enterprise_repo_url`, `odoo_enterprise_version` matrix variables, and the `ODOO_ENTERPRISE_SSH_PRIVATE_KEY` secret will trigger the automatic checkout and mounting of enterprise code if configured as per the main CI workflow logic.
+
 Available commands:
 
 - `oca_install_addons`: make addons to test (found in `$ADDONS_DIR`, modulo

@@ -19,11 +19,6 @@ RUN apt-get update -qq \
 
 ENV PIPX_BIN_DIR=/usr/local/bin
 
-# Make pip work in standard-based mode only This disables use of deprecated
-# setup.py bdist_wheel and.py develop commands in favor of the PEP 517 and PEP
-# 660 interfaces.
-ENV PIP_USE_PEP517=1
-
 # Install wkhtml
 RUN case $(lsb_release -c -s) in \
       focal) WKHTML_DEB_URL=https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.focal_amd64.deb ;; \
@@ -106,7 +101,7 @@ RUN pipx inject --pip-args="--no-cache-dir" pyproject-dependencies $build_deps
 # Make a virtualenv for Odoo so we isolate from system python dependencies and
 # make sure addons we test declare all their python dependencies properly
 RUN python$python_version -m venv /opt/odoo-venv \
-    && /opt/odoo-venv/bin/pip install -U "pip" \
+    && /opt/odoo-venv/bin/pip install -U "setuptools<58" "wheel" "pip" \
     && /opt/odoo-venv/bin/pip list
 ENV PATH=/opt/odoo-venv/bin:$PATH
 
@@ -138,7 +133,7 @@ RUN mkdir /tmp/getodoo \
     && (curl -sSL https://github.com/$odoo_org_repo/tarball/$odoo_version | tar -C /tmp/getodoo -xz) \
     && mv /tmp/getodoo/* /opt/odoo \
     && rmdir /tmp/getodoo
-RUN pip install --no-cache-dir -e /opt/odoo --config-setting=editable_mode=compat \
+RUN pip install --no-cache-dir -e /opt/odoo                         \
     && pip list
 
 # Make an empty odoo.cfg

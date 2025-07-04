@@ -16,6 +16,7 @@ jobs:
   main:
     runs-on: ubuntu-latest
     strategy:
+      max-parallel: 16
       fail-fast: false
       matrix:
         include:

@@ -27,6 +27,11 @@ env SETUPTOOLS_ODOO_POST_VERSION_STRATEGY_OVERRIDE=none \
       >> test-requirements.txt
 cat test-requirements.txt
 
+# We ensure that the test-constraints.txt file does not exist
+if [ -e "test-constraints.txt" ]; then
+    echo "Error: test-constraints.txt already exists."
+    exit 1
+fi
 # To be sure to install addons from this repo if they are dependencies of dependencies,
 # we create a constraints file with local directory references to the addons to test.
 if python -c 'import sys; sys.exit(sys.version_info < (3,6))' ; then

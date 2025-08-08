@@ -89,7 +89,8 @@ RUN apt-get update -qq \
        # some other build tools
        swig \
        libffi-dev \
-       pkg-config
+       pkg-config \
+       jq
 
 # We use manifestoo to check licenses, development status and list addons and dependencies
 RUN pipx install --pip-args="--no-cache-dir" "manifestoo>=0.3.1"
@@ -112,7 +113,12 @@ ARG odoo_version
 
 # Install Odoo requirements (use ADD for correct layer caching).
 # We use requirements from OCB for easier maintenance of older versions.
-ADD https://raw.githubusercontent.com/OCA/OCB/$odoo_version/requirements.txt /tmp/ocb-requirements.txt
+ADD https://api.github.com/repos/OCA/OCB/git/refs/heads/$odoo_version /tmp/branch.json
+
+# Use the commit SHA from JSON to download exact requirements.txt
+RUN SHA=$(jq -r .object.sha /tmp/branch.json) \
+ && curl -sSL "https://raw.githubusercontent.com/OCA/OCB/${SHA}/requirements.txt" \
+    -o /tmp/ocb-requirements.txt
 # The sed command is to use the latest version of gevent and greenlet. The
 # latest version works with all versions of Odoo that we support here, and the
 # oldest pinned in Odoo's requirements.txt don't have wheels, and don't build

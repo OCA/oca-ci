@@ -44,7 +44,7 @@ def test_openerp_server_rc():
 
 
 def test_import_odoo():
-    subprocess.check_call(["python", "-c", "import odoo; odoo.addons.__path__"])
+    subprocess.check_call(["python", "-c", "import odoo.addons"])
     subprocess.check_call(["python", "-c", "import odoo.cli"])
 
 

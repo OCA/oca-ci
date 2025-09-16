@@ -24,6 +24,10 @@ ENV PIPX_BIN_DIR=/usr/local/bin
 # 660 interfaces.
 ENV PIP_USE_PEP517=1
 
+# Increase timeout for keyserver
+RUN mkdir -p ~/.gnupg \
+    && echo connect-timeout 600 >> ~/.gnupg/dirmngr.conf
+
 # Install wkhtml
 RUN case $(lsb_release -c -s) in \
       focal) WKHTML_DEB_URL=https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.focal_amd64.deb ;; \

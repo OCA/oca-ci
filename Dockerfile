@@ -51,11 +51,6 @@ RUN npm install -g rtlcss less@3.0.4 less-plugin-clean-css
 RUN apt-get update -qq \
     && DEBIAN_FRONTEND=noninteractive apt-get install -qq postgresql-client
 
-RUN curl -sSL https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o /tmp/chrome.deb \
-    && apt-get update -qq \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -qq -y --no-install-recommends /tmp/chrome.deb  \
-    && rm /tmp/chrome.deb
-
 RUN add-apt-repository -y ppa:deadsnakes/ppa
 
 ARG python_version
@@ -89,7 +84,17 @@ RUN apt-get update -qq \
        swig \
        libffi-dev \
        pkg-config \
-       jq
+       jq \
+       # chrome
+       unzip \
+       '?and(?name(libatk-bridge.*) | ?name(libatk1.*) | ?name(libdrm2.*) | ?name(libxcomposite1.*) | ?name(libXdamage.*) | ?name(libxfixes3.*) | ?name(libXrandr.*) | ?name(libgbm.*) | ?name(libxkbcommon0.*) | ?name(libpango1.*) | ?name(libcairo2.*) | ?name(libasound2), ?not(?name(.*-dev)))'
+
+# Install chrome
+ARG chrome_milestone=126
+RUN curl -sSL $(curl -s https://googlechromelabs.github.io/chrome-for-testing/latest-versions-per-milestone-with-downloads.json | jq -r '.milestones."'$chrome_milestone'".downloads.chrome | .[] | select(.platform == "linux64") .url') -o /tmp/chrome.zip \
+    && unzip /tmp/chrome.zip -d /opt \
+    && ln -snf /opt/chrome-linux64/chrome /usr/bin/google-chrome \
+    && rm /tmp/chrome.zip
 
 # We use manifestoo to check licenses, development status and list addons and dependencies
 RUN pipx install --pip-args="--no-cache-dir" "manifestoo>=0.3.1"

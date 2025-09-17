@@ -23,92 +23,110 @@ jobs:
           # odoo/odoo
           - python_version: "3.6"
             codename: focal
+            chrome_milestone: 126
             odoo_version: "12.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.6-odoo12.0
           - python_version: "3.6"
             codename: focal
+            chrome_milestone: 126
             odoo_version: "13.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.6-odoo13.0
           - python_version: "3.6"
             codename: focal
+            chrome_milestone: 126
             odoo_version: "14.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.6-odoo14.0
           - python_version: "3.8"
             codename: focal
+            chrome_milestone: 126
             odoo_version: "14.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.8-odoo14.0
           - python_version: "3.8"
             codename: focal
+            chrome_milestone: 126
             odoo_version: "15.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.8-odoo15.0
           - python_version: "3.9"
             codename: focal
+            chrome_milestone: 126
             odoo_version: "15.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.9-odoo15.0
           - python_version: "3.10"
             codename: jammy
+            chrome_milestone: 126
             odoo_version: "16.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.10-odoo16.0
           - python_version: "3.10"
             codename: jammy
+            chrome_milestone: 139
             odoo_version: "17.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.10-odoo17.0
           - python_version: "3.10"
             codename: jammy
+            chrome_milestone: 139
             odoo_version: "18.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.10-odoo18.0
           # oca/ocb
           - python_version: "3.6"
             codename: focal
+            chrome_milestone: 126
             odoo_version: "12.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.6-ocb12.0
           - python_version: "3.6"
             codename: focal
+            chrome_milestone: 126
             odoo_version: "13.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.6-ocb13.0
           - python_version: "3.6"
             codename: focal
+            chrome_milestone: 126
             odoo_version: "14.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.6-ocb14.0
           - python_version: "3.8"
             codename: focal
+            chrome_milestone: 126
             odoo_version: "14.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.8-ocb14.0
           - python_version: "3.8"
             codename: focal
+            chrome_milestone: 126
             odoo_version: "15.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.8-ocb15.0
           - python_version: "3.9"
             codename: focal
+            chrome_milestone: 126
             odoo_version: "15.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.9-ocb15.0
           - python_version: "3.10"
             codename: jammy
+            chrome_milestone: 126
             odoo_version: "16.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.10-ocb16.0
           - python_version: "3.10"
             codename: jammy
+            chrome_milestone: 139
             odoo_version: "17.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.10-ocb17.0
           - python_version: "3.10"
             codename: jammy
+            chrome_milestone: 139
             odoo_version: "18.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.10-ocb18.0
@@ -136,6 +154,7 @@ jobs:
           file: "Dockerfile${{ matrix.python_version == '3.6' && '-legacypy' || '' }}"
           build-args: |
             codename=${{ matrix.codename }}
+            chrome_milestone=${{ matrix.chrome_milestone }}
             python_version=${{ matrix.python_version }}
             odoo_version=${{ matrix.odoo_version }}
             odoo_org_repo=${{ matrix.odoo_org_repo }}
@@ -152,6 +171,8 @@ jobs:
         run: docker run -v ${PWD}/tests:/mnt/tests --network=host -e PGHOST=localhost ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest /mnt/tests/runtests.sh -v
         # Don't bother with Odoo 8 and 9 for now...
         if: ${{ matrix.odoo_version != '8.0' && matrix.odoo_version != '9.0' }}
+      - name: Chrome version
+        run: docker run ghcr.io/oca/oca-ci/${{ matrix.image_name }}:latest /opt/chrome-linux64/chrome --version
       - name: Push image
         uses: docker/build-push-action@v6
         with:

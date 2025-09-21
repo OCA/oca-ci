@@ -156,7 +156,6 @@ RUN pip install --no-cache-dir -e /opt/odoo --config-setting=editable_mode=compa
 # Make an empty odoo.cfg
 RUN echo "[options]" > /etc/odoo.cfg
 ENV ODOO_RC=/etc/odoo.cfg
-ENV OPENERP_SERVER=/etc/odoo.cfg
 
 COPY bin/* /usr/local/bin/
 

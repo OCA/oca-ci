@@ -24,7 +24,6 @@ Environment variables:
 
 - `ODOO_VERSION` (8.0, ..., 14.0, ...)
 - `ODOO_RC`
-- `OPENERP_SERVER=$ODOO_RC`
 - `PGHOST=postgres`
 - `PGUSER=odoo`
 - `PGPASSWORD=odoo`

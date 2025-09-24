@@ -18,4 +18,5 @@ fi
 unbuffer $(which odoo) \
   -d ${PGDATABASE} \
   -i ${ADDONS:-base} \
+  --http-interface=127.0.0.1 \
   --stop-after-init | oca_checklog_odoo

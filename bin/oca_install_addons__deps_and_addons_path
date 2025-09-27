@@ -44,4 +44,4 @@ fi
 cat test-constraints.txt
 
 # Install dependencies of addons to test.
-pip install -r test-requirements.txt -c test-constraints.txt
+pip install -r test-requirements.txt -c test-constraints.txt -c /opt/odoo/requirements.txt

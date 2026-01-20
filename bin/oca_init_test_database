@@ -9,14 +9,35 @@ set -exo pipefail
 
 oca_wait_for_postgres
 
+# Identify ODOO_MAJOR version
+if [[ "$ODOO_VERSION" =~ ^([0-9]+)\.([0-9]+)$ ]]; then
+  ODOO_MAJOR="${BASH_REMATCH[1]}"
+else
+  printf 'Invalid ODOO_VERSION format: %s\n' "$ODOO_VERSION" >&2
+  exit 1
+fi
+
+# Select addons to install
 if [ -n "${INCLUDE}" ]; then
     ADDONS=$(manifestoo --select-include "${INCLUDE}" --select-exclude "${EXCLUDE}" list-depends --separator=,)
 else
     ADDONS=$(manifestoo --select-addons-dir ${ADDONS_DIR} --select-exclude "${EXCLUDE}" list-depends --separator=,)
 fi
 
-unbuffer $(which odoo) \
-  -d ${PGDATABASE} \
-  -i ${ADDONS:-base} \
-  --http-interface=127.0.0.1 \
-  --stop-after-init | oca_checklog_odoo
+# Build odoo run parameters
+params=(
+  -d "$PGDATABASE"
+  -i "$ADDONS"
+  --http-interface=127.0.0.1
+  --stop-after-init
+)
+
+# Add --skip-auto-install for Odoo 19.0 and later
+# Since Odoo 19.0, already installed addons are not re-installed by --init,
+# and so their unit tests are not executed.
+# So, we let oca_install_addons explicitly install and test them.
+if (( ODOO_MAJOR >= 19 )); then
+    params+=(--skip-auto-install)
+fi
+
+unbuffer $(which odoo) ${params[@]} | oca_checklog_odoo

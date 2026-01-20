@@ -11,3 +11,14 @@ def test_success():
             ["oca_run_tests"], cwd=addons_dir, text=True
         )
         assert did_run_test_module(result, "addon_success.tests.test_success")
+
+
+def test_success_auto_install():
+    """Test successful test with auto-install."""
+    with install_test_addons(["addon_auto_install"]) as addons_dir:
+        dropdb()
+        subprocess.check_call(["oca_init_test_database"], cwd=addons_dir)
+        result = subprocess.check_output(
+            ["oca_run_tests"], cwd=addons_dir, text=True
+        )
+        assert did_run_test_module(result, "addon_auto_install.tests.test_success")

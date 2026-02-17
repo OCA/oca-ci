@@ -132,6 +132,7 @@ RUN SHA=$(jq -r .object.sha /tmp/branch.json) \
 # oldest pinned in Odoo's requirements.txt don't have wheels, and don't build
 # anymore with the latest cython.
 RUN sed -i -E "s/^(gevent|greenlet)==.*/\1/" /tmp/ocb-requirements.txt \
+ && sed -i -E "s/^cbor2==5.4.2/cbor2==5.4.3/" /tmp/ocb-requirements.txt \
  && pip install --no-cache-dir \
       -r /tmp/ocb-requirements.txt \
       packaging

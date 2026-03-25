@@ -191,6 +191,7 @@ jobs:
           file: "Dockerfile${{ matrix.python_version == '3.6' && '-legacypy' || '' }}"
           build-args: |
             codename=${{ matrix.codename }}
+            chrome_milestone=${{ matrix.chrome_milestone }}
             python_version=${{ matrix.python_version }}
             odoo_version=${{ matrix.odoo_version }}
             odoo_org_repo=${{ matrix.odoo_org_repo }}

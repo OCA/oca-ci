@@ -1,6 +1,12 @@
 #!/bin/bash
 set -ex
 
+# Since we run as root in a container, the ownership of the git directory
+# from action/checkout is different, and since the build process may invoke
+# git, it may fail with git introspection failed: fatal: detected dubious
+# ownership in repository at ... So we mark the current directory as safe.
+git config --global --add safe.directory $PWD
+
 # show pip config
 pip config list
 

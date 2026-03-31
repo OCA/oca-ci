@@ -7,7 +7,9 @@ CI on these images, be aware that, while we will not break things without
 reason, we will prioritize ease of maintenance for OCA over backward
 compatibility. ⚠️
 
-These images provide the following guarantees:
+They are rebuilt every day at 04:00 UTC, to always include latest odoo changes.
+
+They provide the following guarantees:
 
 - Odoo runtime dependencies are installed (`wkhtmltopdf`, `lessc`, etc).
 - Odoo source code is in `/opt/odoo`.

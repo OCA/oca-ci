@@ -87,6 +87,7 @@ jobs:
             odoo_version: "20.0"
             odoo_org_repo: "odoo/odoo"
             image_name: py3.12-odoo20.0
+            postgres_image: pgvector/pgvector:pg16
           # oca/ocb
           - python_version: "3.6"
             codename: focal
@@ -154,9 +155,14 @@ jobs:
             odoo_version: "20.0"
             odoo_org_repo: "oca/ocb"
             image_name: py3.12-ocb20.0
+            postgres_image: pgvector/pgvector:pg16
     services:
       postgres:
-        image: postgres:12
+        # Odoo 20.0 requires PostgreSQL >= 16 (release.MIN_PG_VERSION) and its
+        # base module uses PG16-only SQL such as any_value(). pgvector/pgvector
+        # is the official postgres image plus the vector extension, which the
+        # Odoo 20.0 AI features use when available.
+        image: ${{ matrix.postgres_image || 'postgres:12' }}
         env:
           POSTGRES_USER: odoo
           POSTGRES_PASSWORD: odoo

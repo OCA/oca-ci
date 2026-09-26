@@ -15,6 +15,9 @@ odoo_version_info = tuple(map(int, os.environ["ODOO_VERSION"].split(".")))
 
 odoo_bin = "odoo"
 
+# build addons with whool (True) or setuptools-odoo (False)
+use_whool = (odoo_version_info >= (17, 0))
+
 
 @contextlib.contextmanager
 def preserve_odoo_rc():
@@ -36,6 +39,15 @@ def preserve_odoo_venv():
         subprocess.check_call(["mv", ODOO_VENV + ".org", ODOO_VENV])
 
 
+def get_addon_project_dir(addons_dir: Path, addon_name: str) -> Path:
+    if use_whool:
+        # When using whool, the project dir is the addon dir, where pyproject.toml is
+        return addons_dir / addon_name
+    else:
+        # When using setuptools-odoo, the setup directory is on the side
+        return addons_dir / "setup" / addon_name
+
+
 @contextlib.contextmanager
 def make_addons_dir(test_addons):
     """Copy test addons to a temporary directory.
@@ -55,16 +67,38 @@ def make_addons_dir(test_addons):
             manifest_path.write_text(repr(manifest))
             if odoo_version_info < (10, 0):
                 manifest_path.rename(manifest_path.parent / "__openerp__.py")
-            pyproject_toml_path = tmppath / addon_name / "pyproject.toml"
-            pyproject_toml_path.write_text(
-                textwrap.dedent(
-                    """\
-                    [build-system]
-                    requires = ["whool"]
-                    build-backend = "whool.buildapi"
-                    """
+            if use_whool:
+                pyproject_toml_dir = get_addon_project_dir(tmppath, addon_name)
+                assert pyproject_toml_dir.is_dir()
+                pyproject_toml_dir.joinpath("pyproject.toml").write_text(
+                    textwrap.dedent(
+                        """\
+                        [build-system]
+                        requires = ["whool"]
+                        build-backend = "whool.buildapi"
+                        """
+                    )
                 )
-            )
+            else:
+                setup_py_dir = get_addon_project_dir(tmppath, addon_name)
+                setup_py_dir.mkdir(parents=True, exist_ok=True)
+                setup_py_dir.joinpath("setup.py").write_text(
+                    textwrap.dedent(
+                        """\
+                        import setuptools
+
+                        setuptools.setup(
+                            setup_requires=['setuptools-odoo'],
+                            odoo_addon=True,
+                        )
+                        """
+                    )
+                )
+                setup_py_dir.joinpath("odoo").mkdir()
+                setup_py_dir.joinpath("odoo").joinpath("addons").mkdir()
+                setup_py_dir.joinpath("odoo").joinpath("addons").joinpath(addon_name).symlink_to(
+                    tmppath / addon_name
+                )
         yield tmppath
 
 

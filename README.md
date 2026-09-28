@@ -46,7 +46,8 @@ Available commands:
   path. Append `addons_path=${ADDONS_PATH},${ADDONS_DIR}` to `$ODOO_RC`.
 - `oca_init_test_database`: create a test database named `$PGDATABASE` with
   direct dependencies of addons to test installed in it
-- `oca_run_tests`: run tests of addons on `$PGDATABASE`, with coverage.
+- `oca_run_tests`: run tests of addons on `$PGDATABASE`, with coverage. Since
+  Odoo 20, also run their Hoot (JavaScript unit) tests.
 - `oca_export_and_commit_pot`: export `.pot` files for all addons in
   `$ADDONS_DIR` that are installed in `$PGDATABASE`; git commit changes if any,
   using `$OCA_GIT_USER_NAME` and `$OCA_GIT_USER_EMAIL`.

@@ -20,3 +20,21 @@ unbuffer coverage run --include "${ADDONS_DIR}/*" --branch \
     --test-enable \
     --http-interface=127.0.0.1 \
     --stop-after-init | oca_checklog_odoo
+
+#
+# Run Hoot (JavaScript unit) tests of the addons to test.
+# Since Odoo 20, they are run by the cross-module WebSuite and MobileWebSuite
+# test classes of the web addon. As web is already installed in the test
+# database, the run above does not load them. Without -i, Odoo loads the
+# post-install tests of all installed addons, and the hoot/<addon> test tags
+# select the Hoot tests of the addons to test.
+#
+if [ "${ODOO_VERSION%%.*}" -ge 20 ] 2>/dev/null; then
+    HOOT_TEST_TAGS=hoot/${ADDONS//,/,hoot/}
+    unbuffer $(which odoo) \
+        -d ${PGDATABASE} \
+        --test-enable \
+        --test-tags "${HOOT_TEST_TAGS}" \
+        --http-interface=127.0.0.1 \
+        --stop-after-init | oca_checklog_odoo
+fi
